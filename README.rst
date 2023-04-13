@@ -14,9 +14,7 @@ Weatherly is a simple package that retrieves weather data from WeatherAPI.com. I
 💻 Code example
 ---------------
 
-.. code-block:: python
-    :caption: example.py
-    :name: Example
+.. code:: python
 
     import weatherly
     
