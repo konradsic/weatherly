@@ -12,3 +12,20 @@ __author__ = 'konradsic'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2023-present konradsic'
 __version__ = '0.0.1'
+
+from typing import NamedTuple, Literal
+
+from .client import *
+from .errors import *
+from .utils import *
+
+class VersionInfo(NamedTuple):
+    major: int
+    minor: int
+    micro: int
+    release_type: Literal["alpha", "beta", "pre", "final"]
+    
+version_info = VersionInfo(major=0, minor=0, micro=1, release_type="pre")
+
+
+del NamedTuple, Literal, VersionInfo

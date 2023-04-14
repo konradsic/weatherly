@@ -1,3 +1,4 @@
+"""
 MIT License
 
 Copyright (c) 2023 Konrad (@konradsic)
@@ -19,3 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+"""
+
+from typing import (
+    Dict,
+    Any,
+)
+
+def parse_kwargs_to_urlargs(kwargs: Dict[str, Any]) -> str:
+    """
+    Parses keyword arguments (kwargs) to format fitting URLs
+    Example: ``{"some_key": "some value", "yes": "no"}`` -> ``?some_key=some_value&yes=no``
+    
+    Parameters
+    ----------
+    kwargs: Dict[:class:`str`, Any]
+        A dictionary of keyword arguments to be parsed.
+        
+    Returns
+    -------
+    args_string: :class:`str`
+        A string - formatted keyword arguments
+    """
+    if not kwargs: return ""
+    
+    args_string = ""
+    first = True
+    
+    for k,v in kwargs.items():
+        args_string += f"{'?' if first else '&'}{k}={v}"
+        first = False
+    return args_string
