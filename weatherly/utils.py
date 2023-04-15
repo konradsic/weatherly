@@ -25,7 +25,9 @@ SOFTWARE.
 from typing import (
     Dict,
     Any,
+    overload
 )
+from .enums import Languages
 
 def parse_kwargs_to_urlargs(kwargs: Dict[str, Any]) -> str:
     """
@@ -51,3 +53,32 @@ def parse_kwargs_to_urlargs(kwargs: Dict[str, Any]) -> str:
         args_string += f"{'?' if first else '&'}{k}={v}"
         first = False
     return args_string
+
+@overload
+def find_language(lang: str) -> None:
+    ...
+
+def find_language(lang: str) -> str:
+    """
+    Used to find language code from available languages.
+
+    Paremeters
+    ----------
+    lang: :class:`str`
+        A language you want to search for
+
+    Returns
+    -------
+    lang_code: Union[:class:`str`, None]
+        A language code for given language. Could be ``None``
+    """
+    lang = lang.lower()
+
+    lang_code = None
+
+    for lang in Languages:
+        if lang.name.lower() == lang or lang.value == lang:
+            lang_code = lang.value
+            break
+    
+    return lang_code

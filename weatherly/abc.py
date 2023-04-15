@@ -21,3 +21,30 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
+from typing import (
+    Any,
+    Literal,
+    Dict,
+    TypeVar,
+)
+
+RespDict = TypeVar('RespDict', Dict[str, Any])
+
+class ResponseModel:
+    """
+    ResponseModel is an ABC that defines a basic response model from WeatherAPI.
+    Almost all models inherit from this class.
+    
+    Attributes
+    ----------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: :class:`str`
+        Response code. See 
+    """
+    raw: RespDict
+    status: int
+    code: int | None

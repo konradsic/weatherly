@@ -33,7 +33,7 @@ from typing import (
 )
 import urllib
 from urllib.request import urlopen, Request
-from .utils import parse_kwargs_to_urlargs
+from ..utils import parse_kwargs_to_urlargs
 import json
 
 T = TypeVar("T")

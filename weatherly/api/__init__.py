@@ -1,4 +1,9 @@
 """
+weatherly/api
+--------------
+An package extension to weatherly providing access to WeatherAPI (requests, client, etc.)
+
+
 MIT License
 
 Copyright (c) 2023 Konrad (@konradsic)
@@ -21,28 +26,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
-
-class WeatherAPIException(Exception): 
-    """
-    The base class for all ``weatherly`` exceptions.
-    
-    Parameters
-    ----------
-    status: :class:`int`
-        HTTP status code
-    code: :class:`int`
-        Error code
-    message: :class:`str`
-        Message provided with the error
-    """
-    def __init__(self, status: int, code: int, message: str, *args):
-        self.status = status
-        self.code = code
-        self.message = message
-        self.formatted_message = f"{self.status} (error code {self.code}): {message}"
-        
-    def __str__(self):
-        return self.__repr__()
-    
-    def __repr__(self):
-        return self.formatted_message
