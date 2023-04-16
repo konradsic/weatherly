@@ -25,6 +25,12 @@ SOFTWARE.
 __all__ = (
     "WeatherlyException",
     "WeatherAPIException",
+    "NoLocationFound",
+    "InvalidAPIKey",
+    "APILimitExceeded",
+    "APIKeyDisabled",
+    "AccessDenied",
+    "InternalApplicationError",
 )
 
 class WeatherlyException(Exception):
