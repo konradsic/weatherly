@@ -1,9 +1,4 @@
 """
-weatherly/api
---------------
-An package extension to weatherly providing access to WeatherAPI (requests, client, etc.)
-
-
 MIT License
 
 Copyright (c) 2023 Konrad (@konradsic)
@@ -27,4 +22,4 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .client import *
+from .abc import *

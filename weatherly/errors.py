@@ -22,9 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-class WeatherAPIException(Exception): 
+__all__ = (
+    "WeatherlyException",
+    "WeatherAPIException",
+)
+
+class WeatherlyException(Exception):
     """
-    The base class for all ``weatherly`` exceptions.
+    A base class for all ``weatherly`` exceptions. Almost all exceptions of this module inherit from this class.
+
+    Inherits from :class:`Exception`.
+    """
+    pass
+
+class WeatherAPIException(WeatherlyException): 
+    """
+    The base class for :class:`weatherly.WeatherAPIClient` weather requests exceptions.
     
     Parameters
     ----------
@@ -40,9 +53,64 @@ class WeatherAPIException(Exception):
         self.code = code
         self.message = message
         self.formatted_message = f"{self.status} (error code {self.code}): {message}"
-        
-    def __str__(self):
-        return self.__repr__()
+        super().__init__(self.formatted_message, *args)
+
+class NoLocationFound(WeatherAPIException): 
+    """
+    Exception like this is raised when no location was found when searching for weather data.
+
+    Usually has status code of 400 and error code 1006.
     
-    def __repr__(self):
-        return self.formatted_message
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass
+
+class InvalidAPIKey(WeatherAPIException): 
+    """
+    Exception like this is raised when provided API key is invalid
+
+    Usually has status code of 401 and error code 2006.
+    
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass
+
+class APILimitExceeded(WeatherAPIException): 
+    """
+    Exception like this is raised when API key has exceeded monthly calls limit.
+
+    Usually has status code of 400 and error code 2007.
+    
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass
+
+class APIKeyDisabled(WeatherAPIException): 
+    """
+    Exception like this is raised when API key has been disabled.
+
+    Usually has status code of 403 and error code 2008.
+    
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass
+
+class AccessDenied(WeatherAPIException): 
+    """
+    Exception like this is raised when API key does not have access to requested resource.
+
+    Usually has status code of 403 and error code 2009.
+    
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass
+
+class InternalApplicationError(WeatherAPIException): 
+    """
+    Exception like this is raised when an internal application error occured. There is nothing to do about it.
+
+    Usually has status code of 400 and error code 9999.
+    
+    Inherits from :class:`WeatherAPIException`.
+    """
+    pass

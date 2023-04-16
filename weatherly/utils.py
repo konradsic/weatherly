@@ -76,8 +76,8 @@ def find_language(lang: str) -> str:
 
     lang_code = None
 
-    for lang in Languages:
-        if lang.name.lower() == lang or lang.value == lang:
+    for language in Languages:
+        if language.name.lower() == lang or language.value == lang:
             lang_code = lang.value
             break
     
