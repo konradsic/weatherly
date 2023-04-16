@@ -32,7 +32,7 @@ from typing import (
     TypeVar
 )
 import urllib
-from urllib.request import urlopen, Request
+import requests
 from ..utils import parse_kwargs_to_urlargs
 import json
 
@@ -65,7 +65,7 @@ class BaseAPIClient():
         self,
         path: str,
         **kwargs: Optional[Dict[str, str]]
-    ) -> Dict[Any, Any]:
+    ) -> Tuple[Dict[Any, Any], requests.Response]:
         """
         Request data from the base URL + path.
         Private function, use ``WeatherAPIClient`` methods instead
@@ -78,11 +78,9 @@ class BaseAPIClient():
             Additional parameters for the request.
         """
         full_url = self.url + path + parse_kwargs_to_urlargs({**self.default_options, **kwargs})
-        request = Request(url=full_url, method="GET")
-        
-        response = urlopen(request).read().decode("utf-8")
-        jsoned = json.loads(response)
-        return jsoned
+
+        response = requests.get(full_url)
+        return response.json(), response
         
         
     

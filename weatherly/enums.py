@@ -22,13 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from typing import (
-    Any,
-    Literal,
-    Dict,
-    TypeVar,
+from enum import Enum
+
+__all__ = (
+    "Languages",
 )
-from enums import Enum
 
 class Languages(Enum):
     """

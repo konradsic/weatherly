@@ -69,12 +69,18 @@ def find_language(lang: str) -> str:
 
     Returns
     -------
-    lang_code: Union[:class:`str`, None]
-        A language code for given language. Could be ``None``
+    Union[:class:`str`, None]
+        Language code, could be ``None``
     """
-    lang = lang.lower()
-
     lang_code = None
+
+    if isinstance(lang, Languages):
+        try:
+            return lang.value
+        except: 
+            return None
+
+    lang = lang.lower()
 
     for language in Languages:
         if language.name.lower() == lang or language.value == lang:
