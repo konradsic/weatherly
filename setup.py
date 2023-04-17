@@ -38,7 +38,7 @@ setup(
     version=version,
     packages=packages,
     license='MIT',
-    description='A Python wrapper for the Discord API',
+    description='A simple Python wrapper around WeatherAPI. Get current weather, forecast, history and more...',
     long_description=readme,
     long_description_content_type='text/x-rst',
     include_package_data=True,
