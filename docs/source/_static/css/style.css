@@ -1,0 +1,32 @@
+/* Attributable stuff */
+.py-attribute-table {
+    display: flex;
+    flex-wrap: wrap;
+    background-color: var(--color-api-background);
+    border-radius: 0 0 3px 3px;
+    border-left: #0e84b5 solid 3px;
+    margin-bottom: 2rem;
+}
+
+.py-attribute-table-entry {
+    list-style: None;
+}
+
+.py-attribute-table-column {
+    flex: .5;
+}
+
+.py-attribute-table-column > span {
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+.py-attribute-table-badge {
+    font-weight: bold;
+    margin-right: .5rem;
+}
+
+.sig.sig-object {
+    padding: 2px 7px;
+    border-radius: 5px;
+}

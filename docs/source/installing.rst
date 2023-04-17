@@ -4,7 +4,7 @@ Installing
 .. important::
     Python 3.10 or higher is required to install weatherly.
 
-To install ``weatherlly``, run this command
+To install ``weatherly``, run this command
 
 * On Windows:
 

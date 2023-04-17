@@ -117,6 +117,22 @@ class WeatherAPIClient(BaseAPIClient):
             if v is not None: final_options[k] = v
 
         resp = self._request(endpoint, **final_options)
+
+        if not resp[1].status_code < 400:
+            # raise errors yay
+            error_data = resp[0]["error"]
+            code = error_data["code"]
+            status = resp[1].status_code
+            msg = error_data["message"]
+
+            if code == 1006: raise NoLocationFound(status, code, msg)
+            elif code == 2006: raise InvalidAPIKey(status, code, msg)
+            elif code == 2007: raise APILimitExceeded(status, code, msg)
+            elif code == 2008: raise APIKeyDisabled(status, code, msg)
+            elif code == 2009: raise AccessDenied(status, code, msg)
+            elif code == 9999: raise InternalApplicationError(status, code, msg)
+            else: raise WeatherAPIException(status, code, msg)
+
         return resp
 
     def get_current_weather(self, 
@@ -135,8 +151,8 @@ class WeatherAPIClient(BaseAPIClient):
         lang: Optional[Union[:class:`str`, Languages]]
             Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
             To get a list of languages visit :class:`Languages`.
-        aqi: Literal["yes", "no"]
-            Enable/Disable Air Quality data in forecast API output. Defaults to "no".
+        aqi: Literal["yes", "no", None]
+            Enable/Disable Air Quality data in forecast API output. If nothing is passes, then it defaults to client default value.
         kwargs: Dict[:class:`str`, Any]
             Additional keyword arguments to request
 
@@ -144,6 +160,23 @@ class WeatherAPIClient(BaseAPIClient):
         -------
         :class:`CurrentWeatherData`
             Current weather data class
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
         """
         options = {
             "aqi": aqi or self.aqi,
@@ -152,21 +185,6 @@ class WeatherAPIClient(BaseAPIClient):
         }
         if lang is not None: options["lang"] = lang
         resp = self._call_request("current.json", options)
-        
-        if not resp[1].status_code < 400:
-            # raise errors yay
-            error_data = resp[0]["error"]
-            code = error_data["code"]
-            status = resp[1].status_code
-            msg = error_data["message"]
-
-            if code == 1006: raise NoLocationFound(status, code, msg)
-            elif code == 2006: raise InvalidAPIKey(status, code, msg)
-            elif code == 2007: raise APILimitExceeded(status, code, msg)
-            elif code == 2008: raise APIKeyDisabled(status, code, msg)
-            elif code == 2009: raise AccessDenied(status, code, msg)
-            elif code == 9999: raise InternalApplicationError(status, code, msg)
-            else: raise WeatherAPIException(status, code, msg)
 
         weather = CurrentWeatherData(resp[0]["current"], resp[1].status_code, None)
         return weather

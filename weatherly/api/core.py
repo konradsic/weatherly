@@ -51,7 +51,7 @@ class BaseAPIClient():
     base_url: :class:`str`
         An URL that will be used as a base for requests.
     default_options: Optional[Dict[:class:`str`, Any]]
-        Default options for request that will be automatically added.
+        Default options for requests made by the client that will be automatically added.
     """
     def __init__(
         self,

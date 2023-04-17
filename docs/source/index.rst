@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 ⛅ Welcome to weatherly's documentation!
-=====================================
+============================================
 **Weatherly** is a simple package that retrieves weather data from WeatherAPI.com (https://WeatherAPI.com/docs). 
 It provides an easy to use interface to access current and historical weather data for a specific location.
 
@@ -13,11 +13,21 @@ It provides an easy to use interface to access current and historical weather da
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
-   
+   :caption: Contents
+
    installing
    quickstart
+   weatherly
 
+Getting started
+--------------------
+**First steps:** :doc:`installing`, :doc:`quickstart` \n
+**Examples:** Examples of using this package can be found `here <https://github.com/konradsic/weatherly/tree/master/weatherly>`_
+
+Manuals
+-------------
+You can always check the full documentation made from sources below:
+:doc:`weatherly` 
 
 Indices and tables
 ==================
