@@ -52,7 +52,7 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.10',
-        "Programming Language :: Python :: 3.11"
+        "Programming Language :: Python :: 3.11",
         'Topic :: Internet',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
