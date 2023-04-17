@@ -1,14 +1,17 @@
 ⛅ weatherly
 ====================
-.. image:: https://img.shields.io/github/license/konradsic/weatherly?color=lightblue&style=for-the-badge
+.. image:: https://img.shields.io/github/license/konradsic/weatherly?color=blue&style=for-the-badge
     :target: https://github.com/konradsic/weatherly/blob/master/LICENSE
     :alt: Weatherly license
-.. image:: https://img.shields.io/pypi/v/weatherly?color=lightblue&style=for-the-badge
+.. image:: https://img.shields.io/pypi/v/weatherly?color=blue&style=for-the-badge
     :target: https://pypi.python.org/project/weatherly
     :alt: Weatherly version on PyPI
-.. image:: https://img.shields.io/pypi/pyversions/weatherly?color=lightblue&style=for-the-badge
+.. image:: https://img.shields.io/pypi/pyversions/weatherly?color=blue&style=for-the-badge
     :target: https://pypi.python.org/project/weatherly
     :alt: Supported Python versions
+.. image:: https://img.shields.io/github/actions/workflow/status/konradsic/weatherly/build.yml?style=for-the-badge
+    :target: https://github.com/konradsic/weatherly
+    :alt: Build status
 
 Weatherly is a simple package that retrieves weather data from WeatherAPI.com. It provides an easy to use interface to access current and historical weather data for a specific location.
 
