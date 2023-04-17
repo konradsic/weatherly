@@ -24,7 +24,8 @@ extras_require = {
 }
 
 packages = [
-    "weatherly.api"
+    "weatherly",
+    "weatherly.api",
 ]
 
 setup(
