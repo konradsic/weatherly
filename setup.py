@@ -56,6 +56,7 @@ setup(
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
         'Topic :: Utilities',
+        'Topic :: Scientific/Engineering :: Atmospheric Science',
         'Typing :: Typed',
     ],
 )
