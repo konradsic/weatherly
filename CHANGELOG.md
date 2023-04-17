@@ -1,6 +1,9 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
 
+### Version 0.1.1
+This version fixes all bugs when uploading to PyPI. The package is now live on https://pypi.org/project/weatherly/
+
 ### Version 0.1.0
 This is the first release of the `weatherly` package. It adds:
 * A client (`WeatherAPIClient`)

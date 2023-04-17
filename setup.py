@@ -9,7 +9,7 @@ if not version:
     raise RuntimeError('version is not set')
 
 readme = ""
-with open("README.rst") as readme_file: 
+with open("README.rst", encoding="utf-8") as readme_file: 
     readme = readme_file.read()
 
 
@@ -44,7 +44,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     extras_require=extras_require,
-    python_requires='>=3.10..0',
+    python_requires='>=3.10.0',
     classifiers=[
         'Development Status :: 1 - Planning',
         'License :: OSI Approved :: MIT License',
