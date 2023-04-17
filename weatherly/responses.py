@@ -32,6 +32,8 @@ from typing import (
 class CurrentWeatherData(CurrentWeather):
     """
     Current weather data, a common return type from methods that requests this from WeatherAPI.com.
+    
+    Please note, that only ``condition_text`` is translated into requested language.
 
     Attributes
     ----------
