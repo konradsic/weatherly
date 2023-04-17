@@ -23,8 +23,6 @@ from . import (
     utils as utils
 )
 
-babmcmamskjd
-
 class VersionInfo(NamedTuple):
     major: int
     minor: int
