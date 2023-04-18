@@ -42,6 +42,6 @@ jobs:
       - name: Build docs
         shell: bash
         run: |
-          pip install sphinx==5.3.0 furo==2023.3.27
+          pip install sphinx==5.3.0 sphinx_book_theme==1.0.1
           cd docs
           sphinx-build -b html source build 
