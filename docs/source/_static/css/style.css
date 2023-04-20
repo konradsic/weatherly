@@ -5,6 +5,7 @@
     background-color: var(--color-api-background);
     border-radius: 0 0 3px 3px;
     border-left: #0e84b5 solid 3px;
+    margin-top: 2rem;
     margin-bottom: 2rem;
 }
 

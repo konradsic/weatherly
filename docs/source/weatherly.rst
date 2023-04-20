@@ -1,7 +1,7 @@
 .. currentmodule:: weatherly
 
 Feature documentation
-=========================
+==========================
 This section is a documentation of the weatherly API interface.
 
 
@@ -18,14 +18,14 @@ Enums
     :members:
 
 Responses from WeatherAPI
------------------------------
+------------------------------
 .. attributetable:: CurrentWeatherData
 
 .. autoclass:: CurrentWeatherData
     :members:
 
 Exceptions
-------------
+-------------
 
 .. autoexception:: WeatherlyException
     :members:

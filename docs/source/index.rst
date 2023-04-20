@@ -21,13 +21,13 @@ It provides an easy to use interface to access current and historical weather da
 
 Getting started
 --------------------
-**First steps:** :doc:`installing`, :doc:`quickstart` \n
-**Examples:** Examples of using this package can be found `here <https://github.com/konradsic/weatherly/tree/master/weatherly>`_
+| **First steps:** :doc:`installing`, :doc:`quickstart`
+| **Examples:** Examples of using this package can be found `here <https://github.com/konradsic/weatherly/tree/master/weatherly>`_
 
 Manuals
 -------------
-You can always check the full documentation made from sources below:
-:doc:`weatherly` 
+| You can always check the full documentation made from sources below:
+| :doc:`weatherly` 
 
 Indices and tables
 ==================

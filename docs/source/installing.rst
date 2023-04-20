@@ -18,4 +18,4 @@ To install ``weatherly``, run this command
 
     python3 -m pip install weatherly
 
-After successful installation you can move on to the :doc:`quickstart` section
+After successful installation you can move on to the :doc:`quickstart` section or check out the :doc:`weatherly`.

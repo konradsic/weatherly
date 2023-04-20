@@ -37,5 +37,6 @@ Code example:
     current_weather = client.get_current_weather("London")
 
     print(current_weather.temp_c)
+    print(current_weather.temp_f)
 
-If you run this code, you will see that you've got London's current temperature in celsius (``temp_c``).
+If you run this code, you will see that you've got London's current temperature in celsius (``temp_c``). Weather temperature is also provided in fahrenheit (``temp_f``).
