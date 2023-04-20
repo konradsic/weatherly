@@ -26,6 +26,7 @@ from typing import (
     Any,
     Literal,
     Dict,
+    Optional
 )
 from abc import ABC
 
@@ -122,3 +123,37 @@ class CurrentWeather(ResponseModel):
     feelslike_c: float
     feelslike_f: float
     uv: float
+
+class LocationModel(ResponseModel):
+    """An ABC that provides information about a location
+
+    Attributes
+    --------------
+    id: :class:`int`
+        A specific ID of the location. Can be ``None``
+    name: :class:`str`
+        Name of the location (e.g. London)
+    region: :class:`str`
+        A region of the location
+    country: :class:`str`
+        Country where the location is
+    latitude: :class:`float`
+        Latitude coordinate of the location
+    longitude: :class:`float`
+        Longitude coordinate of the location
+    timezone_id: Optional[:class:`str`]
+        Timezone ID of the location (e.g. Europe/London). Could be ``None`` when using the Search/Autocomplete API.
+    localtime_epoch: Optional[:class:`int`]
+        Local time of the location as a timestamp
+    localtime_formatted: Optional[:class:`str`]
+        Formatted local time of the location
+    """
+    id: Optional[int]
+    name: str
+    region: str
+    country: str
+    latitude: float
+    longitude: float
+    timezone_id: Optional[str]
+    localtime_epoch: Optional[int]
+    localtime_formatted: Optional[str]

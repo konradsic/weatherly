@@ -24,7 +24,7 @@ SOFTWARE.
 
 from .core import BaseAPIClient
 from ..enums import Languages
-from ..responses import CurrentWeatherData
+from ..responses import CurrentWeatherData, LocationData
 from ..errors import (
     WeatherAPIException,
     NoLocationFound,
@@ -43,7 +43,8 @@ from typing import (
     Literal,
     Dict,
     Optional,
-    Union
+    Union,
+    List
 )
 
 WEATHERAPI_BASE_URL = "http://api.weatherapi.com/v1/"
@@ -188,3 +189,41 @@ class WeatherAPIClient(BaseAPIClient):
 
         weather = CurrentWeatherData(resp[0]["current"], resp[1].status_code, None)
         return weather
+
+    def get_locations(self, query: str):
+        """
+        Get locations for given query
+
+        Parameters
+        ---------------
+        query: :class:`str`
+            Query string, a location you are searching for
+
+        Returns
+        -----------
+        List[:class:`LocationData`]
+            A list of :class:`LocationData` classes.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        resp = self._call_request("search.json",{"q": query})
+
+        locations = []
+        for loc in resp[0]:
+            locations.append(LocationData(loc, resp[1].status_code, None))
+        return locations

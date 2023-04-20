@@ -22,11 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .abc import CurrentWeather
+from .abc import CurrentWeather, LocationModel
 from typing import (
     Dict,
     Any,
     Union
+)
+
+__all__ = (
+    "CurrentWeatherData",
+    "LocationData",
 )
 
 class CurrentWeatherData(CurrentWeather):
@@ -115,3 +120,54 @@ class CurrentWeatherData(CurrentWeather):
         self.feelslike_c = raw["feelslike_c"]
         self.feelslike_f = raw["feelslike_f"]
         self.uv = raw["uv"]
+
+class LocationData(LocationModel):
+    """
+    Location data, returned with most requests.
+    
+    Attributes
+    --------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Union[:class:`int`, None]
+        Response code. In some cases this can be ``None``
+    id: Optional[:class:`int`]
+        A specific ID of the location. Can be ``None``
+    name: :class:`str`
+        Name of the location (e.g. London)
+    region: :class:`str`
+        A region of the location
+    country: :class:`str`
+        Country where the location is
+    latitude: :class:`float`
+        Latitude coordinate of the location
+    longitude: :class:`float`
+        Longitude coordinate of the location
+    timezone_id: Optional[:class:`str`]
+        Timezone ID of the location (e.g. Europe/London). Could be ``None`` when using the Search/Autocomplete API.
+    localtime_epoch: Optional[:class:`int`]
+        Local time of the location as a timestamp
+    localtime_formatted: Optional[:class:`str`]
+        Formatted local time of the location
+    """
+    def __init__(
+        self, 
+        raw: Dict[str, Any],
+        status: int,
+        code: Union[int, None]
+    ) -> None:
+        self.raw = raw
+        self.status = status
+        self.code = code
+
+        self.id = raw.get('id', None)
+        self.name = raw['name']
+        self.region = raw['region']
+        self.country = raw['country']
+        self.latitude = raw['lat']
+        self.longitude = raw['lon']
+        self.timezone_id = raw.get('tz_id', None)
+        self.localtime_epoch = raw.get('localtime_epoch')
+        self.localtime_formatted = raw.get('localtime', None)

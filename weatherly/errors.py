@@ -65,7 +65,7 @@ class NoLocationFound(WeatherAPIException):
     """
     Exception like this is raised when no location was found when searching for weather data.
 
-    Usually has status code of 400 and error code 1006.
+    Usually has status code  400 and error code 1006.
     
     Inherits from :class:`WeatherAPIException`.
     """
@@ -75,7 +75,7 @@ class InvalidAPIKey(WeatherAPIException):
     """
     Exception like this is raised when provided API key is invalid
 
-    Usually has status code of 401 and error code 2006.
+    Usually has status code 401 and error code 2006.
     
     Inherits from :class:`WeatherAPIException`.
     """
@@ -85,7 +85,7 @@ class APILimitExceeded(WeatherAPIException):
     """
     Exception like this is raised when API key has exceeded monthly calls limit.
 
-    Usually has status code of 400 and error code 2007.
+    Usually has status code 400 and error code 2007.
     
     Inherits from :class:`WeatherAPIException`.
     """
@@ -95,7 +95,7 @@ class APIKeyDisabled(WeatherAPIException):
     """
     Exception like this is raised when API key has been disabled.
 
-    Usually has status code of 403 and error code 2008.
+    Usually has status code 403 and error code 2008.
     
     Inherits from :class:`WeatherAPIException`.
     """
@@ -105,7 +105,7 @@ class AccessDenied(WeatherAPIException):
     """
     Exception like this is raised when API key does not have access to requested resource.
 
-    Usually has status code of 403 and error code 2009.
+    Usually has status code 403 and error code 2009.
     
     Inherits from :class:`WeatherAPIException`.
     """
@@ -115,7 +115,7 @@ class InternalApplicationError(WeatherAPIException):
     """
     Exception like this is raised when an internal application error occured. There is nothing to do about it.
 
-    Usually has status code of 400 and error code 9999.
+    Usually has status code 400 and error code 9999.
     
     Inherits from :class:`WeatherAPIException`.
     """

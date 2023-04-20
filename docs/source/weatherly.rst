@@ -24,6 +24,11 @@ Responses from WeatherAPI
 .. autoclass:: CurrentWeatherData
     :members:
 
+.. attributetable:: LocationData
+
+.. autoclass:: LocationData
+    :members:
+
 Exceptions
 -------------
 
