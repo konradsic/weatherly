@@ -19,6 +19,9 @@ Enums
 
 Responses from WeatherAPI
 ------------------------------
+.. note::
+    Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`WeatherAPIClient` class.
+
 .. attributetable:: CurrentWeatherData
 
 .. autoclass:: CurrentWeatherData
@@ -27,6 +30,11 @@ Responses from WeatherAPI
 .. attributetable:: LocationData
 
 .. autoclass:: LocationData
+    :members:
+
+.. attributetable:: AirQualityData
+
+.. autoclass:: AirQualityData
     :members:
 
 Exceptions

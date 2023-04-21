@@ -128,6 +128,9 @@ class CurrentWeather(ResponseModel):
 
 class LocationModel(ResponseModel):
     """An ABC that provides information about a location
+    
+    The following classes implement this ABC:
+    - :class:`~weatherly.LocationData`
 
     Attributes
     --------------
@@ -159,3 +162,51 @@ class LocationModel(ResponseModel):
     timezone_id: Optional[str]
     localtime_epoch: Optional[int]
     localtime_formatted: Optional[str]
+    
+class AirQuality(ResponseModel):
+    """An ABC that provides information about air quality for a specific location.
+    
+    The following classes implement this ABC:
+    - :class:`~weatherly.AirQualityData`
+    
+    Attributes
+    --------------
+    co: :class:`float`
+        Carbon Monoxide (μg/m3)
+    o3: :class`float`
+        Ozone (μg/m3)
+    no2: :class`float`	
+        Nitrogen dioxide (μg/m3)
+    so2: :class`float`
+        Sulphur dioxide (μg/m3)
+    pm2_5: :class`float`
+        PM2.5 (μg/m3)
+    pm10: :class`float`
+        PM10 (μg/m3)
+    us_epa_index: :class`int`
+        US - EPA standard.
+        * 1 means Good
+        * 2 means Moderate
+        * 3 means Unhealthy for sensitive group
+        * 4 means Unhealthy
+        * 5 means Very Unhealthy
+        * 6 means Hazardous
+    gb_defra_index: :class:`int`
+        UK Defra Index
+        
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+        | Index  | 1    | 2     | 3     | 4        | 5        | 6        | 7     | 8     | 9     | 10         |
+        +========+======+=======+=======+==========+==========+==========+=======+=======+=======+============+
+        | Band   | Low  | Low   | Low   | Moderate | Moderate | Moderate | High  | High  | High  | Very High  |
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+        | µgm^-3 | 0-11 | 12-23 | 24-35 | 36-41    | 42-47    | 48-53    | 54-58 | 59-64 | 65-70 | 71 or more |
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+    """
+    co: float
+    o3: float
+    no2: float
+    so2: float
+    pm2_5: float
+    pm10: float
+    us_epa_index: int
+    gb_defra_index: int

@@ -76,6 +76,24 @@ class WeatherAPIClient(BaseAPIClient):
         Enable/Disable Tide data in Marine API output. Defaults to "no".
     kwargs: Dict[:class:`str`, Any]
         Additional keyword arguments passed by default to requests made by the client
+        
+    Attributes
+    -------------
+    lang: Union[:class:`str`, :class:`Languages`, None]
+        Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
+        To get a list of languages visit :class:`Languages`. If ``None`` then the default language is used (English)
+    dt: Optional[:class:`int`]
+        Restrict date output for Forecast and History API method. (Required for History and Future API)
+    end_dt: Optional[:class:`int`]
+        Restrict date output for History API method. Only works for API on Pro plan and above. (Available for History API)
+    hour: Optional[:class:`int`]
+        Restricting forecast or history output to a specific hour in a given day.
+    aqi: Literal["yes", "no"]
+        Enable/Disable Air Quality data in forecast API output. Defaults to "no".
+    tides: Literal["yes", "no"]
+        Enable/Disable Tide data in Marine API output. Defaults to "no".
+    kwargs: Dict[:class:`str`, Any]
+        Additional keyword arguments passed by default to requests made by the client
     """
     def __init__(
         self,
@@ -138,7 +156,7 @@ class WeatherAPIClient(BaseAPIClient):
 
         return resp
 
-    def set_language(self, lang: Union[str, Languages]) -> Union[Languages, None]:
+    def set_language(self, lang: Union[str, Languages]) -> Optional[Languages]:
         """
         Set client's language when requesting data.
         
@@ -149,16 +167,15 @@ class WeatherAPIClient(BaseAPIClient):
             
         Returns
         ---------
-        :class:`bool`
-            A boolean indicating whether the language was successfully set. If it's ``False``, then something went wrong, probably because of the wrong ``lang`` value.
+        Optional[:class:`Languages`]
+            An enum class representing the language of the client. Is ``None`` when something went wrong and the language was not set.
         """
         lang_class = utils.find_language(lang, asobj=True)
         if not lang_class:
-            self.lang = None
-            return False
+            return None
 
         self.lang = lang_class 
-        return True
+        return self.lang
 
     def get_current_weather(self, 
         query: str,

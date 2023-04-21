@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .abc import CurrentWeather, LocationModel
+from .abc import CurrentWeather, LocationModel, AirQuality
 from typing import (
     Dict,
     Any,
@@ -32,6 +32,7 @@ from typing import (
 __all__ = (
     "CurrentWeatherData",
     "LocationData",
+    "AirQualityData",
 )
 
 class CurrentWeatherData(CurrentWeather):
@@ -40,9 +41,6 @@ class CurrentWeatherData(CurrentWeather):
     
     Please note, that only ``condition_text`` is translated into requested language.
     
-    .. note::
-        This class should not be created manually, instead it will be returned from methods like ``get_current_weather`` of the :class:`WeatherAPIClient` class.
-
     Attributes
     ----------
     raw: Dict[:class:`str`, Any]
@@ -180,3 +178,63 @@ class LocationData(LocationModel):
         self.timezone_id = raw.get('tz_id', None)
         self.localtime_epoch = raw.get('localtime_epoch')
         self.localtime_formatted = raw.get('localtime', None)
+
+class AirQualityData(AirQuality):
+    """
+    Attributes
+    --------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Union[:class:`int`, None]
+        Response code. In some cases this can be ``None``
+    co: :class:`float`
+        Carbon Monoxide (μg/m3)
+    o3: :class`float`
+        Ozone (μg/m3)
+    no2: :class`float`	
+        Nitrogen dioxide (μg/m3)
+    so2: :class`float`
+        Sulphur dioxide (μg/m3)
+    pm2_5: :class`float`
+        PM2.5 (μg/m3)
+    pm10: :class`float`
+        PM10 (μg/m3)
+    us_epa_index: :class`int`
+        US - EPA standard.
+        * 1 means Good
+        * 2 means Moderate
+        * 3 means Unhealthy for sensitive group
+        * 4 means Unhealthy
+        * 5 means Very Unhealthy
+        * 6 means Hazardous
+    gb_defra_index: :class:`int`
+        UK Defra Index
+        
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+        | Index  | 1    | 2     | 3     | 4        | 5        | 6        | 7     | 8     | 9     | 10         |
+        +========+======+=======+=======+==========+==========+==========+=======+=======+=======+============+
+        | Band   | Low  | Low   | Low   | Moderate | Moderate | Moderate | High  | High  | High  | Very High  |
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+        | µgm^-3 | 0-11 | 12-23 | 24-35 | 36-41    | 42-47    | 48-53    | 54-58 | 59-64 | 65-70 | 71 or more |
+        +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Union[int, None]
+    ) -> None:
+        self.raw = raw
+        self.status = status
+        self.code = code
+        
+        self.co2 = raw["co2"]
+        self.o3 = raw["o3"]
+        self.no2 = raw["no2"]
+        self.so2 = raw["so2"]
+        self.pm2_5 = raw["pm2_5"]
+        self.pm10 = raw["pm10"]
+        self.us_epa_index = raw["us-epa-index"]
+        self.gb_defra_index = raw["gb-defra-index"]
