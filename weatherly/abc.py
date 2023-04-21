@@ -61,7 +61,9 @@ class CurrentWeather(ResponseModel):
     - :class:`~weatherly.CurrentWeatherData`
 
     Attributes
-    ----------
+    ------------
+    location: :class:`~weatherly.LocationData`
+        Location of the requested weather data
     last_updated_epoch: :class:`int`
         The timestamp when the weather data was last updated.
     temp_c: :class:`float`

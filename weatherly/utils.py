@@ -55,10 +55,14 @@ def parse_kwargs_to_urlargs(kwargs: Dict[str, Any]) -> str:
     return args_string
 
 @overload
-def find_language(lang: str) -> None:
+def find_language(lang: str, asobj: bool=False) -> None:
+    ...
+    
+@overload
+def find_language(lang: str, asobj: bool=False) -> Languages:
     ...
 
-def find_language(lang: str) -> str:
+def find_language(lang: str, asobj: bool=False) -> str:
     """
     Used to find language code from available languages.
 
@@ -69,13 +73,13 @@ def find_language(lang: str) -> str:
 
     Returns
     -------
-    Union[:class:`str`, None]
-        Language code, could be ``None``
+    Union[:class:`str`, :class:`Languages`, None]
+        Language code, could be ``None``, could be a :class:`Languages` enum.
     """
-    lang_code = None
 
     if isinstance(lang, Languages):
         try:
+            if asobj: return lang
             return lang.value
         except: 
             return None
@@ -84,7 +88,7 @@ def find_language(lang: str) -> str:
 
     for language in Languages:
         if language.name.lower() == lang or language.value == lang:
-            lang_code = lang.value
-            break
-    
-    return lang_code
+            if asobj: return language
+            return language.value
+        
+    return None

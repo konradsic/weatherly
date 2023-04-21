@@ -39,6 +39,9 @@ class CurrentWeatherData(CurrentWeather):
     Current weather data, a common return type from methods that requests this from WeatherAPI.com.
     
     Please note, that only ``condition_text`` is translated into requested language.
+    
+    .. note::
+        This class should not be created manually, instead it will be returned from methods like ``get_current_weather`` of the :class:`WeatherAPIClient` class.
 
     Attributes
     ----------
@@ -48,6 +51,8 @@ class CurrentWeatherData(CurrentWeather):
         HTTP status of the response. 200 is OK, and is the most common status.
     code: Union[:class:`int`, None]
         Response code. In some cases this can be ``None``
+    location: :class:`LocationData`
+        Location of the requested weather data
     last_updated_epoch: :class:`int`
         The timestamp when the weather data was last updated.
     temp_c: :class:`float`
@@ -100,6 +105,10 @@ class CurrentWeatherData(CurrentWeather):
         self.status = status
         self.code = code
         self.raw = raw
+        
+        self.location = LocationData(raw["location"], status, code)
+        raw = raw["current"]
+        
         self.last_updated_epoch = raw["last_updated_epoch"]
         self.temp_c = raw["temp_c"]
         self.temp_f = raw["temp_f"]

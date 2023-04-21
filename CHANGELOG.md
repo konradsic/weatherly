@@ -1,6 +1,11 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
 
+### Version 0.2.0
+This version introduced the `weatherly.LocationData` class, so you can retrieve location information.
+* NEW: `weatherly.CurrentWeatherData` now has a `location` attribute, which is exactly `weatherly.LocationData`
+* Added `weatherly.WeatherAPIClient.get_locations` method that returns an array of `weatherly.LocationData` objects - found locations for the given query.
+
 ### Version 0.1.1
 This version fixes all bugs when uploading to PyPI. The package is now live on https://pypi.org/project/weatherly/
 

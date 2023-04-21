@@ -63,7 +63,7 @@ class WeatherAPIClient(BaseAPIClient):
         API Key used to authenticate when sending requests
     lang: Optional[ Union[:class:`str`, :class:`Languages`] ]
         Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
-        To get a list of languages visit :class:`Languages`.
+        To get a list of languages visit :class:`Languages`. If ``None`` then the default language is used (English)
     dt: Optional[:class:`int`]
         Restrict date output for Forecast and History API method. (Required for History and Future API)
     end_dt: Optional[:class:`int`]
@@ -90,12 +90,12 @@ class WeatherAPIClient(BaseAPIClient):
     ) -> None:
         lang_code = None
         if lang is not None: 
-            lang_code = utils.find_language(lang)
+            lang_code = utils.find_language(lang, asobj=True)
         opts = {
             "key": api_key,
             **kwargs
         }
-        if lang_code: opts.update(lang=lang_code)
+        if lang_code: opts.update(lang = lang_code.value if lang_code is not None else None)
 
         super().__init__(base_url=WEATHERAPI_BASE_URL,
                          default_options=opts)
@@ -106,6 +106,8 @@ class WeatherAPIClient(BaseAPIClient):
         self.aqi = aqi
         self.tides = tides
         self.kwargs = kwargs
+        self.lang = Languages(lang_code) if lang_code else None
+    
     
     def _call_request(self, endpoint: str, options: Dict[str, Any]) -> Dict[str, Any]:
         """Private method used to make requests to WeatherAPI"""
@@ -135,6 +137,28 @@ class WeatherAPIClient(BaseAPIClient):
             else: raise WeatherAPIException(status, code, msg)
 
         return resp
+
+    def set_language(self, lang: Union[str, Languages]) -> Union[Languages, None]:
+        """
+        Set client's language when requesting data.
+        
+        Parameters
+        -----------
+        lang: Union[:class:`str`, :class:`Languages`]
+            Language to set. Can be either a string that is lanuage's name or code or a :class:`Languages` enum object.
+            
+        Returns
+        ---------
+        :class:`bool`
+            A boolean indicating whether the language was successfully set. If it's ``False``, then something went wrong, probably because of the wrong ``lang`` value.
+        """
+        lang_class = utils.find_language(lang, asobj=True)
+        if not lang_class:
+            self.lang = None
+            return False
+
+        self.lang = lang_class 
+        return True
 
     def get_current_weather(self, 
         query: str,
@@ -187,7 +211,7 @@ class WeatherAPIClient(BaseAPIClient):
         if lang is not None: options["lang"] = lang
         resp = self._call_request("current.json", options)
 
-        weather = CurrentWeatherData(resp[0]["current"], resp[1].status_code, None)
+        weather = CurrentWeatherData(resp[0], resp[1].status_code, None)
         return weather
 
     def get_locations(self, query: str):
@@ -227,3 +251,10 @@ class WeatherAPIClient(BaseAPIClient):
         for loc in resp[0]:
             locations.append(LocationData(loc, resp[1].status_code, None))
         return locations
+    
+    def __str__(self):
+        return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
+    
+    def __repr__(self):
+        return repr(f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>")
+    
