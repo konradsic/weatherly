@@ -79,7 +79,7 @@ class WeatherAPIClient(BaseAPIClient):
         
     Attributes
     -------------
-    lang: Union[:class:`str`, :class:`Languages`, None]
+    lang: Optional[:class:`Languages`]
         Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
         To get a list of languages visit :class:`Languages`. If ``None`` then the default language is used (English)
     dt: Optional[:class:`int`]
