@@ -8,7 +8,7 @@ body:
   - type: markdown
     attributes:
       value: >
-        Thanks for speding time to improve this library. We will consider adding it.
+        Thanks for speding time to improve this library. We will consider adding your feature if it looks right.
         
         **Note:** This form is for feature requests only!
   - type: textarea
