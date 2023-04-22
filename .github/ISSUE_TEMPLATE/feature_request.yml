@@ -1,0 +1,75 @@
+name: Feature Request
+description: Request a feature
+labels: ["feature request", "pending"]
+assignees: 
+  - konradsic
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for speding time to improve this library. We will consider adding it.
+        
+        **Note:** This form is for feature requests only!
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please describe the main idea of the feature you want to be added
+      placeholder: e.g. I'm always frustrated when...
+    validations:
+      required: true
+  - type: dropdown
+    id: realted-to
+    attributes:
+      label: To what part of the library your feature request is realated?
+      description: Please select
+      options:
+        - The core library
+        - API Interface
+        - Weather Client
+        - The documentation
+    valitations:
+      required: true
+  - type: textarea
+    id: current-solution
+    attributes:
+      label: Current solution
+      description: If there is, please describe current solution to your problem
+    validations:
+      required: false
+  - type: textarea
+    id: your-solution
+    attributes:
+      label: Your solution
+      description: Please describe your solution to the problem
+    valitations:
+      required: true
+  - type: textarea
+    id: code-sketch
+    attributes:
+      label: Code sketch
+      description: If possible, please enter your ideas on how the code implementing your solution could look.
+    validations:
+      required: false
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      desciption: If needed, probide additional context (e.g. screenshots)
+    validations:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Make sure to fullfill all requirements in the boxes before submitting the issue
+      options:
+        - label: I've checked that this feature is NOT implemented in the latest version of library
+          required: true
+        - label: I've searched open issues for duplicate and similiar feature requests
+          required: true
+        - label: I've hidden the WeatherAPI token if needed
+          required: true
+        - label: I agree to conributing rules and Code of Conduct
+          required: true
