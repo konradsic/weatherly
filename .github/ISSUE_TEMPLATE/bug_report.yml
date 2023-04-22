@@ -17,7 +17,7 @@ body:
       label: Description
       description: A short and concise description of the bug
       placeholder: e.g. When I try to do ... an error occurs
-    validation:
+    validations:
       required: true
   - type: dropdown
     id: problem-related-to
@@ -29,21 +29,21 @@ body:
         - API Interface
         - Weather Client
         - The documentation
-    validation:
+    validations:
       required: true
   - type: textarea
     id: steps-to-reproduce
     attributes:
       label: Steps to reproduce
       description: What did you do that the bug occured
-    validation:
+    validations:
       required: true
   - type: textarea
     id: code
     attributes:
       label: Minimal code that caused the bug
       description: Please paste the code where the bug occured
-    validation:
+    validations:
       required: true
   - type: input
     id: py-version
@@ -51,7 +51,7 @@ body:
       label: Python version
       description: Please specity your Python version
       placeholder: e.g. 3.10
-    validation:
+    validations:
       required: true
   - type: textarea
     id: additional-context
@@ -59,7 +59,7 @@ body:
       label: Additional context
       description: Add anything related to bug that can help resolve it (e.g. screenshots)
       placeholder: If you want to send a large block of code consider using a site like pastebin
-    validation:
+    validations:
       required: false
   - type: checkboxes
     id: checklist
