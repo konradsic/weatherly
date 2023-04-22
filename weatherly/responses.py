@@ -35,6 +35,8 @@ __all__ = (
     "AirQualityData",
 )
 
+GB_DEFRA_BAND = ("Low", "Low", "Low", "Moderate", "Moderate", "Moderate", "High", "High", "High", "Very High")
+
 class CurrentWeatherData(CurrentWeather):
     """
     Current weather data, a common return type from methods that requests this from WeatherAPI.com.
@@ -107,9 +109,9 @@ class CurrentWeatherData(CurrentWeather):
         self.raw = raw
         
         self.location = LocationData(raw["location"], status, code)
-        self.aqi = AirQualityData(raw.get("aqi"), status, code) if raw.get("aqi", None) else None
         raw = raw["current"]
         
+        self.aqi = AirQualityData(raw["air_quality"], status, code) if raw.get("air_quality") else None
         self.last_updated_epoch = raw["last_updated_epoch"]
         self.temp_c = raw["temp_c"]
         self.temp_f = raw["temp_f"]
@@ -182,6 +184,7 @@ class LocationData(LocationModel):
         self.localtime_epoch = raw.get('localtime_epoch')
         self.localtime_formatted = raw.get('localtime', None)
 
+
 class AirQualityData(AirQuality):
     """
     Attributes
@@ -222,6 +225,8 @@ class AirQualityData(AirQuality):
         +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
         | µgm^-3 | 0-11 | 12-23 | 24-35 | 36-41    | 42-47    | 48-53    | 54-58 | 59-64 | 65-70 | 71 or more |
         +--------+------+-------+-------+----------+----------+----------+-------+-------+-------+------------+
+    gb_defra_band: :class:`str`
+        A band corresponding to the :ref:`gb_defra_index`
     """
     def __init__(
         self,
@@ -233,7 +238,7 @@ class AirQualityData(AirQuality):
         self.status = status
         self.code = code
         
-        self.co2 = raw["co2"]
+        self.co = raw["co"]
         self.o3 = raw["o3"]
         self.no2 = raw["no2"]
         self.so2 = raw["so2"]
@@ -241,3 +246,5 @@ class AirQualityData(AirQuality):
         self.pm10 = raw["pm10"]
         self.us_epa_index = raw["us-epa-index"]
         self.gb_defra_index = raw["gb-defra-index"]
+
+        self.gb_defra_band = GB_DEFRA_BAND[self.gb_defra_index-1]

@@ -178,7 +178,8 @@ class WeatherAPIClient(BaseAPIClient):
         return self.lang
 
     def get_current_weather(self, 
-        query: str,
+        query: str, 
+        *,
         lang: Optional[Union[str, Languages]] = None,
         aqi: Literal["yes", "no", None] = None,
         **kwargs: Dict[str, Any]
