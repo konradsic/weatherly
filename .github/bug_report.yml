@@ -1,0 +1,77 @@
+name: Bug Report
+description: Report broken or incorrect behaviour
+labels: ["bug", "pending"]
+assignees: 
+  - konradsic
+
+body:
+  - type: markdown
+    attributes:
+      value: >
+        Thanks for submitting a bug report, your issue will be considered by the library developers.
+        
+        **Note:** This form is for bugs only!
+  - type: input
+    id: description
+    attributes:
+      label: Description
+      description: A short and concise description of the bug
+      placeholder: e.g. When I try to do ... an error occurs
+    validation:
+      required: true
+  - type: dropdown
+    id: problem-related-to
+    attributes:
+      label: What part of the library the bug is related to?
+      description: Please specify
+      options:
+        - The core library
+        - API Interface
+        - Weather Client
+        - The documentation
+    validation:
+      required: true
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: What did you do that the bug occured
+    validation:
+      required: true
+  - type: textarea
+    id: code
+    attributes:
+      label: Minimal code that caused the bug
+      description: Please paste the code where the bug occured
+    validation:
+      required: true
+  - type: input
+    id: py-version
+    attributes:
+      label: Python version
+      description: Please specity your Python version
+      placeholder: e.g. 3.10
+    validation:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Add anything related to bug that can help resolve it (e.g. screenshots)
+      placeholder: If you want to send a large block of code consider using a site like pastebin
+    validation:
+      required: false
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      description: Make sure to fullfill all requirements in the boxes before submitting the issue
+      options:
+        - label: I use the latest relase of the library
+          required: true
+        - label: I've searched open issues for duplicate and similiar bugs
+          required: true
+        - label: I've hidden the WeatherAPI token if needed
+          required: true
+        - label: I agree to conributing rules and Code of Conduct
+          required: true
