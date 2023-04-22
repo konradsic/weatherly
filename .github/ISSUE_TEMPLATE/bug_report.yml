@@ -22,7 +22,7 @@ body:
   - type: dropdown
     id: problem-related-to
     attributes:
-      label: What part of the library the bug is related to?
+      label: To what part of the library the bug is related?
       description: Please specify
       options:
         - The core library
@@ -41,8 +41,22 @@ body:
   - type: textarea
     id: code
     attributes:
-      label: Minimal code that caused the bug
+      label: Minimal reproducible code
       description: Please paste the code where the bug occured
+    validations:
+      required: true
+  - type: textarea
+    id: expected-results
+    attributes:
+      label: Expected results
+      description: Please describe what results you've expected
+    validations:
+      required: true
+  - type: textarea
+    id: actual-results
+    attributes:
+      label: Actual results
+      description: Please describe what actually happened (instead of expected behaviour)
     validations:
       required: true
   - type: input
