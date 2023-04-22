@@ -83,15 +83,15 @@ class WeatherAPIClient(BaseAPIClient):
         Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
         To get a list of languages visit :class:`Languages`. If ``None`` then the default language is used (English)
     dt: Optional[:class:`int`]
-        Restrict date output for Forecast and History API method. (Required for History and Future API)
+        Restricted date output for Forecast and History API method. (Required for History and Future API)
     end_dt: Optional[:class:`int`]
-        Restrict date output for History API method. Only works for API on Pro plan and above. (Available for History API)
+        Restricted date output for History API method. Only works for API on Pro plan and above.
     hour: Optional[:class:`int`]
-        Restricting forecast or history output to a specific hour in a given day.
+        Restricted forecast or history output to a specific hour in a given day.
     aqi: Literal["yes", "no"]
-        Enable/Disable Air Quality data in forecast API output. Defaults to "no".
+        Indicates if Air Quality data has been enabled
     tides: Literal["yes", "no"]
-        Enable/Disable Tide data in Marine API output. Defaults to "no".
+        Indicates if tides data in the Marine API has been enabled
     kwargs: Dict[:class:`str`, Any]
         Additional keyword arguments passed by default to requests made by the client
     """
@@ -194,7 +194,7 @@ class WeatherAPIClient(BaseAPIClient):
             Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
             To get a list of languages visit :class:`Languages`.
         aqi: Literal["yes", "no", None]
-            Enable/Disable Air Quality data in forecast API output. If nothing is passes, then it defaults to client default value.
+            Enable/Disable Air Quality data in forecast API output. If nothing is passed, then it defaults to client default value.
         kwargs: Dict[:class:`str`, Any]
             Additional keyword arguments to request
 

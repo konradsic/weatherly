@@ -91,6 +91,8 @@ class CurrentWeatherData(CurrentWeather):
         Feels like temperature in Fahrenheit
     uv: :class:`float`
         UV Index
+    aqi: Optional[:class:`AirQualityData`]
+        Air quality data. Can be ``None`` (if this field of data was not requested)
     """
     def __init__(
         self,
@@ -105,6 +107,7 @@ class CurrentWeatherData(CurrentWeather):
         self.raw = raw
         
         self.location = LocationData(raw["location"], status, code)
+        self.aqi = AirQualityData(raw.get("aqi"), status, code) if raw.get("aqi", None) else None
         raw = raw["current"]
         
         self.last_updated_epoch = raw["last_updated_epoch"]
@@ -191,17 +194,17 @@ class AirQualityData(AirQuality):
         Response code. In some cases this can be ``None``
     co: :class:`float`
         Carbon Monoxide (μg/m3)
-    o3: :class`float`
+    o3: :class:`float`
         Ozone (μg/m3)
     no2: :class`float`	
         Nitrogen dioxide (μg/m3)
-    so2: :class`float`
+    so2: :class:`float`
         Sulphur dioxide (μg/m3)
     pm2_5: :class`float`
         PM2.5 (μg/m3)
-    pm10: :class`float`
+    pm10: :class:`float`
         PM10 (μg/m3)
-    us_epa_index: :class`int`
+    us_epa_index: :class:`int`
         US - EPA standard.
         * 1 means Good
         * 2 means Moderate
