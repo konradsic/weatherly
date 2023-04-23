@@ -7,9 +7,9 @@ This section is a documentation of the weatherly API interface.
 
 Client
 ----------
-.. attributetable:: WeatherAPIClient
+.. attributetable:: Client
 
-.. autoclass:: WeatherAPIClient
+.. autoclass:: Client
     :members:
 
 Enums
@@ -20,7 +20,7 @@ Enums
 Responses from WeatherAPI
 ------------------------------
 .. note::
-    Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`WeatherAPIClient` class.
+    Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`Client` class.
 
 .. attributetable:: CurrentWeatherData
 

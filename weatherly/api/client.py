@@ -48,12 +48,13 @@ from typing import (
 )
 
 WEATHERAPI_BASE_URL = "http://api.weatherapi.com/v1/"
+BOOL_REPLACE = {True: "yes", False: "no"}
 
 __all__ = (
-    "WeatherAPIClient",
+    "Client",
 )
 
-class WeatherAPIClient(BaseAPIClient):
+class Client(BaseAPIClient):
     """
     A WeatherAPI.com client for fetching various weather information
 
@@ -70,9 +71,9 @@ class WeatherAPIClient(BaseAPIClient):
         Restrict date output for History API method. Only works for API on Pro plan and above. (Available for History API)
     hour: Optional[:class:`int`]
         Restricting forecast or history output to a specific hour in a given day.
-    aqi: Literal["yes", "no"]
+    aqi: :class:`bool`
         Enable/Disable Air Quality data in forecast API output. Defaults to "no".
-    tides: Literal["yes", "no"]
+    tides: :class:`bool`
         Enable/Disable Tide data in Marine API output. Defaults to "no".
     kwargs: Dict[:class:`str`, Any]
         Additional keyword arguments passed by default to requests made by the client
@@ -88,9 +89,9 @@ class WeatherAPIClient(BaseAPIClient):
         Restricted date output for History API method. Only works for API on Pro plan and above.
     hour: Optional[:class:`int`]
         Restricted forecast or history output to a specific hour in a given day.
-    aqi: Literal["yes", "no"]
+    aqi: :class:`bool`
         Indicates if Air Quality data has been enabled
-    tides: Literal["yes", "no"]
+    tides: :class:`bool`
         Indicates if tides data in the Marine API has been enabled
     kwargs: Dict[:class:`str`, Any]
         Additional keyword arguments passed by default to requests made by the client
@@ -102,8 +103,8 @@ class WeatherAPIClient(BaseAPIClient):
         dt: Optional[int] = None,
         end_dt: Optional[int] = None,
         hour: Optional[int] = None,
-        aqi: Literal["yes", "no"] = "no",
-        tides: Literal["yes", "no"] = "no",
+        aqi: bool = False,
+        tides: bool = False,
         **kwargs: Dict[str, Any]
     ) -> None:
         lang_code = None
@@ -135,7 +136,8 @@ class WeatherAPIClient(BaseAPIClient):
             if v is None: del final_options[k]
         # add options to final_options
         for k,v in options.items():
-            if v is not None: final_options[k] = v
+            # also - replace bool with "yes"/"no"
+            if v is not None: final_options[k] = BOOL_REPLACE.get(v, v)
 
         resp = self._request(endpoint, **final_options)
 
@@ -181,7 +183,7 @@ class WeatherAPIClient(BaseAPIClient):
         query: str, 
         *,
         lang: Optional[Union[str, Languages]] = None,
-        aqi: Literal["yes", "no", None] = None,
+        aqi: Optional[bool] = None,
         **kwargs: Dict[str, Any]
     ) -> CurrentWeatherData:
         """
@@ -194,7 +196,7 @@ class WeatherAPIClient(BaseAPIClient):
         lang: Optional[Union[:class:`str`, Languages]]
             Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
             To get a list of languages visit :class:`Languages`.
-        aqi: Literal["yes", "no", None]
+        aqi: Optional[:class:`bool`]
             Enable/Disable Air Quality data in forecast API output. If nothing is passed, then it defaults to client default value.
         kwargs: Dict[:class:`str`, Any]
             Additional keyword arguments to request

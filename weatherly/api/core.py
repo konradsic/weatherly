@@ -44,7 +44,7 @@ __all__ = (
 
 class BaseAPIClient():
     """
-    Represents a base API client that can handle requests. Used as a base class for ``WeatherAPIClient``
+    Represents a base API client that can handle requests. Used as a base class for :class:`Client`
     
     Parameters
     ----------
@@ -68,7 +68,7 @@ class BaseAPIClient():
     ) -> Tuple[Dict[Any, Any], requests.Response]:
         """
         Request data from the base URL + path.
-        Private function, use ``WeatherAPIClient`` methods instead
+        Private function, use :class:`Client` methods instead
         
         Parameters
         ----------

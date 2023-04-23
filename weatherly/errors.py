@@ -43,7 +43,7 @@ class WeatherlyException(Exception):
 
 class WeatherAPIException(WeatherlyException): 
     """
-    The base class for :class:`weatherly.WeatherAPIClient` weather requests exceptions.
+    The base class for :class:`Client` weather requests exceptions.
     
     Parameters
     ----------

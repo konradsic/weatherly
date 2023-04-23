@@ -26,7 +26,8 @@ from typing import (
     Any,
     Literal,
     Dict,
-    Optional
+    Optional,
+    List
 )
 from abc import ABC
 
@@ -105,6 +106,7 @@ class CurrentWeather(ResponseModel):
     uv: :class:`float`
         UV Index
     """
+    location: ResponseModel # should inherit from this, actually its "weatherly.LocationData"
     last_updated_epoch: int
     temp_c: float
     temp_f: float
@@ -210,3 +212,289 @@ class AirQuality(ResponseModel):
     pm10: float
     us_epa_index: int
     gb_defra_index: int
+
+class ForecastHourModel(ResponseModel):
+    """
+    An ABC defining a base forecast hour model from WeatherAPI
+
+    The following classes implement this ABC:
+    - :class:`~weatherly.ForecastHour`
+
+    Attributes
+    -------------
+        time_epoch: :class:`int`
+            Time as epoch
+        time: :class:`str`
+            Date and time
+        temp_c: :class:`float`
+            Temperature in celsius
+        temp_f: :class:`float`
+            Temperature in fahrenheit
+        condition_text: :class:`str`
+            Weather condition text
+        condition_icon: :class:`str`
+            Weather condition icons
+        condition_code: :class:`int`
+            Weather condition code
+        wind_mph: :class:`float`
+            Maximum wind speed in miles per hour
+        wind_kph: :class:`float`
+            Maximum wind speed in kilometer per hour
+        wind_degree: :class:`int`
+            Wind direction in degrees
+        wind_dir: :class:`str`
+            Wind direction as 16 point compass. e.g.: NSW
+        pressure_mb: :class:`float`
+            Pressure in millibars
+        pressure_in: :class:`float`
+            Pressure in inches
+        precip_mm: :class:`float`
+            Precipitation amount in millimeters
+        precip_in: :class:`float`
+            Precipitation amount in inches
+        humidity: :class:`int`
+            Humidity as percentage
+        cloud: :class:`int`
+            Cloud cover as percentage
+        feelslike_c: :class:`float`
+            Feels like temperature as celcius
+        feelslike_f: :class:`float`
+            Feels like temperature as fahrenheit
+        windchill_c: :class:`float`
+            Windchill temperature in celcius
+        windchill_f: :class:`float`
+            Windchill temperature in fahrenheit
+        headindex_c: :class:`float`
+            Heat index in celcius
+        headindex_f: :class:`float`
+            Heat index in fahrenheit
+        dewpoint_c: :class:`float`
+            Dew point in celcius
+        dewpoint_f: :class:`float`
+            Dew point in fahrenheit
+        will_it_rain: :class:`bool`
+            Will it will rain or not
+        will_it_snow: :class:`bool`
+            Will it will snow or not
+        is_day: :class:`bool`
+            Whether to show day condition icon or night icon
+        vis_km: :class:`float`
+            Visibility in kilometer
+        vis_miles: :class:`float`
+            Visibility in miles
+        chance_of_rain: :class:`int`
+            Chance of rain as percentage
+        chance_of_snow: :class:`int`
+            Chance of snow as percentage
+        gust_mph: :class:`float`
+            Wind gust in miles per hour
+        gust_kph: :class:`float`
+            Wind gust in kilometer per hour
+        uv: :class:`float`
+            UV Index
+        aqi: Optional[:class:`AirQuality`]
+            Air Quality data. See :class:`AirQualityData` for more info.
+    """
+    time_epoch: int
+    time: str
+    temp_c: float
+    temp_f: float
+    condition_text: str
+    condition_icon: str
+    condition_code: int
+    wind_mph: float
+    wind_kph: float
+    wind_degree: int
+    wind_dir: str
+    pressure_mb: float
+    pressure_in: float
+    precip_mm: float
+    precip_in: float
+    humidity: int
+    cloud: int
+    feelslike_c: float
+    feelslike_f: float
+    windchill_c: float
+    windchill_f: float
+    headindex_c: float
+    headindex_f: float
+    dewpoint_c: float
+    dewpoint_f: float
+    will_it_rain: bool
+    will_it_snow: bool
+    is_day: bool
+    vis_km: float
+    vis_miles: float
+    chance_of_rain: int
+    chance_of_snow: int
+    gust_mph: float
+    gust_kph: float
+    uv: float
+
+    aqi: Optional[AirQuality]
+    
+
+class ForecastDayModel(ResponseModel):
+    """
+    An ABC defining a base forecast day model from WeatherAPI
+
+    The following classes implement this ABC:
+    - :class:`~weatherly.ForecastDay`
+
+    Attributes
+    -------------
+        date: :class:`str`
+            
+        date_epoch: :class:`int`
+            
+        maxtemp_c: :class:`float`
+            
+        maxtemp_f: :class:`float`
+            
+        mintemp_c: :class:`float`
+            
+        mintemp_f: :class:`float`
+            
+        avgtemp_c: :class:`float`
+            
+        avgtemp_f: :class:`float`
+            
+        maxwind_mph: :class:`float`
+            
+        maxwind_mph: :class:`float`
+            
+        totalprecip_mm: :class:`float`
+            
+        totalprecip_in: :class:`float`
+            
+        avgvis_km: :class:`float`
+            
+        avgvis_miles: :class:`float`
+            
+        avghumidity: :class:`int`
+            
+        uv: :class:`int`
+            
+        condition_text: :class:`str`
+            
+        condition_icon: :class:`str`
+            
+        condition_code: :class:`int`
+            
+        sunrise: Optional[:class:`str`]
+            
+        sunset: Optional[:class:`str`]
+            
+        moonrise: Optional[:class:`str`]
+            
+        moonset: Optional[:class:`str`]
+            
+        moon_phase: Optional[:class:`str`]
+            
+        moon_illumination: Optional[:class:`float`]
+            
+        aqi: Optional[:class:`AirQuality`]
+            
+        hour_data: List[:class:`ForecastHourModel`]
+            
+    """
+    date: str
+    date_epoch: int
+    # day
+    maxtemp_c: float
+    maxtemp_f: float
+    mintemp_c: float
+    mintemp_f: float
+    avgtemp_c: float
+    avgtemp_f: float
+
+    maxwind_mph: float
+    maxwind_mph: float
+
+    totalprecip_mm: float
+    totalprecip_in: float
+
+    avgvis_km: float
+    avgvis_miles: float
+    avghumidity: int
+    uv: int
+
+    condition_text: str
+    condition_icon: str
+    condition_code: int
+    # astro data
+    sunrise: Optional[str]
+    sunset: Optional[str]
+    moonrise: Optional[str]
+    moonset: Optional[str]
+    moon_phase: Optional[str]
+    moon_illumination: Optional[float]
+    # aqi
+    aqi: Optional[AirQuality]
+
+    hour_data: List[ForecastHourModel]
+
+
+class AlertModel(ResponseModel):
+    """
+    An ABC defining a base alert model from WeatherAPI
+
+    The following classes implement this ABC:
+    - :class:`~weatherly.AlertData`
+
+    Attributes
+    -------------
+    headline: :class:`str`
+        Alert headline
+    msg_type: :class:`str`
+        Type of alert
+    severity: :class:`str`
+        Severity of alert
+    urgency: :class:`str`
+        Urgency
+    areas: :class:`str`
+        Areas covered
+    category: :class:`str`
+        Category
+    certainty: :class:`str`
+        Certainty
+    event: :class:`str`
+        Event
+    note: :class:`str`
+        Note
+    effective: :class:`str`
+        Effective
+    expires: :class:`str`
+        Expires
+    description: :class:`str`
+        Description
+    instruction: :class:`str`
+        Instruction
+    """
+    headline: str
+    msg_type: str
+    severity: str
+    urgency: str
+    areas: str
+    category: str
+    certainty: str
+    event: str
+    note: str
+    effective: str
+    expires: str
+    description: str
+    instruction: str
+
+class ForecastModel(ResponseModel):
+    """
+    An ABC defining a base response from Forecast API.
+
+    The following classes implement this ABC:
+    - :class:`~weatherly.ForecastData`
+    
+    Attributes
+    -------------
+    """
+    location: LocationModel
+    forecast_days: List[ForecastDayModel]
+    alerts: List[AlertModel]
