@@ -11,7 +11,7 @@ __title__ = 'weatherly'
 __author__ = 'konradsic'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2023-present konradsic'
-__version__ = '0.2.0'
+__version__ = '0.3.0'
 
 from typing import NamedTuple, Literal
 
