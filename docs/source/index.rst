@@ -12,7 +12,7 @@ It provides an easy to use interface to access current and historical weather da
    This project is currently under heavy development and does not work for now (until stable version get released)
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents
 
    installing

@@ -30,7 +30,7 @@ Weatherly is a simple package that retrieves weather data from WeatherAPI.com. I
 
     import weatherly
     
-    client = weatherly.Client(api_key="your WeatherAPi key")
+    client = weatherly.Client(api_key="your WeatherAPI key")
     # you can set language to all request, or pass it manually
     client.set_language("fr")     # lang code
     client.set_language("German") # language full name

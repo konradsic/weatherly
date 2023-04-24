@@ -264,7 +264,7 @@ class AirQualityData(AirQuality):
 
 class AlertData(AlertModel):
     """
-    A alert from WeatherAPI
+    An alert from WeatherAPI
 
     Attributes
     -------------
@@ -419,6 +419,45 @@ class ForecastHour(ForecastHourModel):
         self.raw = raw
         self.status = status
         self.code = code
+
+        self.time_epoch = raw["time_epoch"]
+        self.time = raw["time"]
+        self.temp_c = raw["temp_c"]
+        self.temp_f = raw["temp_f"]
+        self.condition_text = raw["condition"]["text"]
+        self.condition_icon = raw["condition"]["icon"]
+        self.condition_code = raw["condition"]["code"]
+        self.wind_mph = raw["wind_mph"]
+        self.wind_kph = raw["wind_kph"]
+        self.wind_degree = raw["wind_degree"]
+        self.wind_dir = raw["wind_dir"]
+        self.pressure_mb = raw["pressure_mb"]
+        self.pressure_in = raw["pressure_in"]
+        self.precip_mm = raw["precip_mm"]
+        self.precip_in = raw["precip_in"]
+        self.humidity = raw["humidity"]
+        self.cloud = raw["cloud"]
+        self.feelslike_c = raw["feelslike_c"]
+        self.feelslike_f = raw["feelslike_f"]
+        self.windchill_c = raw["windchill_c"]
+        self.windchill_f = raw["windchill_f"]
+        self.heatindex_c = raw["heatindex_c"]
+        self.heatindex_f = raw["heatindex_f"]
+        self.dewpoint_c = raw["dewpoint_c"]
+        self.dewpoint_f = raw["dewpoint_f"]
+        self.will_it_rain = bool(raw["will_it_rain"])
+        self.will_it_snow = bool(raw["will_it_snow"])
+        self.is_day = bool(raw["is_day"])
+        self.vis_km = raw["vis_km"]
+        self.vis_miles = raw["vis_miles"]
+        self.chance_of_rain = raw["chance_of_rain"]
+        self.chance_of_snow = raw["chance_of_snow"]
+        self.gust_mph = raw["gust_mph"]
+        self.gust_kph = raw["gust_kph"]
+        self.uv = raw["uv"]
+        
+        if raw.get("air_quality"): self.aqi = AirQualityData(raw["air_quality"], status, code)
+        else: self.aqi = None
     
 class ForecastDay(ForecastDayModel):
     """
@@ -450,7 +489,7 @@ class ForecastDay(ForecastDayModel):
         Average temperature in fahrenheit for the day
     maxwind_mph: :class:`float`
         Maximum wind speed in miles per hour
-    maxwind_mph: :class:`float`
+    maxwind_kph: :class:`float`
         Maximum wind speed in kilometer per hour
     totalprecip_mm: :class:`float`
         Total precipitation in milimeter
@@ -472,31 +511,28 @@ class ForecastDay(ForecastDayModel):
         Weather condition code
     hour_data: List[:class:`ForecastHour`]
         A list of :class:`ForecastHour` objects representing hourly weather data.
-        
-    .. note::
-        Below values can be ``None`` if user has disabled ``astro`` for astronomical data, ``aqi`` for air quality data.
-    sunrise: Optional[:class:`str`]
+    sunrise: :class:`str`
         Sunrise time
-    sunset: Optional[:class:`str`]
+    sunset: :class:`str`
         Sunset time
-    moonrise: Optional[:class:`str`]
+    moonrise: :class:`str`
         Moonrise time
-    moonset: Optional[:class:`str`]
+    moonset: :class:`str`
         Moonset time
-    moon_phase: Optional[:class:`str`]
+    moon_phase: :class:`str`
         Moon phases. Value returned:
-        * New Moon
-        * Waxing Crescent
-        * First Quarter
-        * Waxing Gibbous
-        * Full Moon
-        * Waning Gibbous
-        * Last Quarter
-        * Waning Crescent
-    moon_illumination: Optional[:class:`float`]
+            * New Moon
+            * Waxing Crescent
+            * First Quarter
+            * Waxing Gibbous
+            * Full Moon
+            * Waning Gibbous
+            * Last Quarter
+            * Waning Crescent
+    moon_illumination: :class:`float`
         Moon illumination as %
     aqi: Optional[:class:`AirQualityData`]
-        Air Quality data as :class:`AirQualityData` object.
+        Air Quality data as :class:`AirQualityData` object. Can be ``None``
     """
     def __init__(
         self,
@@ -507,12 +543,12 @@ class ForecastDay(ForecastDayModel):
         self.raw = raw
         self.status = status
         self.code = code
+        self.date = raw["date"]
+        self.date_epoch = raw["date_epoch"]
         
         before_raw = raw.copy()
         raw = raw["day"]
         
-        self.date = raw["date"]
-        self.date_epoch = raw["date_epoch"]
         self.maxtemp_c = raw["maxtemp_c"]
         self.maxtemp_f = raw["maxtemp_f"]
         self.mintemp_c = raw["mintemp_c"]
@@ -530,26 +566,20 @@ class ForecastDay(ForecastDayModel):
         self.condition_text = raw["condition"]["text"]
         self.condition_icon = raw["condition"]["icon"]
         self.condition_code = raw["condition"]["code"]
+        if raw.get("air_quality"): self.aqi = AirQualityData(raw["air_quality"], status, code)
+        else: self.aqi = None
         
         raw = before_raw
         self.hour_data = list([
             ForecastHour(elem, status, code) for elem in raw["hour"]
         ])
-        
-        if raw.get("astro", None):
-            self.sunrise = raw["astro"]["sunrise"]
-            self.sunset = raw["astro"]["sunset"]
-            self.moonrise = raw["astro"]["moonrise"]
-            self.moonset = raw["astro"]["moonset"]
-            self.moon_phase = raw["astro"]["moon_phase"]
-            self.moon_illumination = raw["astro"]["moon_illumination"]
-        else:
-            self.sunrise = None
-            self.sunset = None
-            self.moonrise = None
-            self.moonset = None
-            self.moon_phase = None
-            self.moon_illumination = None
+        self.sunrise = raw["astro"]["sunrise"]
+        self.sunset = raw["astro"]["sunset"]
+        self.moonrise = raw["astro"]["moonrise"]
+        self.moonset = raw["astro"]["moonset"]
+        self.moon_phase = raw["astro"]["moon_phase"]
+        self.moon_illumination = raw["astro"]["moon_illumination"]
+
     
 class ForecastData(ForecastModel):
     """

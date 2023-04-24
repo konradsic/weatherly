@@ -24,7 +24,11 @@ SOFTWARE.
 
 from .core import BaseAPIClient
 from ..enums import Languages
-from ..responses import CurrentWeatherData, LocationData
+from ..responses import (
+    CurrentWeatherData, 
+    LocationData, 
+    ForecastData
+)
 from ..errors import (
     WeatherAPIException,
     NoLocationFound,
@@ -271,6 +275,66 @@ class Client(BaseAPIClient):
         for loc in resp[0]:
             locations.append(LocationData(loc, resp[1].status_code, None))
         return locations
+
+    def get_forecast_data(
+        self,
+        query: str, 
+        *,
+        aqi: Optional[bool] = None,
+        alerts: Optional[bool] = None,
+        lang: Optional[Union[str, Languages]] = None,
+        **kwargs: Dict[str, Any]
+    ) -> ForecastData:
+        """
+        Get forecast data from Forecast API
+
+        Parameters
+        -------------
+        query: :class:`str`
+            Query string, location you want to get forecast data for
+        aqi: Optional[:class:`bool`]
+            Enable/Disable Air Quality data. Defaults to ``None`` (will use client's default)
+        alerts: Optional[:class:`bool`]
+            Enable/Disable alerts data. Defaults to ``None`` (will use client's default)
+        lang: Optional[Union[:class`str`, :class`Languages`]]
+            Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
+            To get a list of languages visit :class:`Languages`.
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+            
+        Returns
+        ----------
+        :class:`ForecastData`
+            Fetched forecast data as a class.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        options = {
+            "aqi": aqi or self.aqi,
+            "q": query,
+            "alerts": alerts or self.kwargs.get("alerts"),
+            **kwargs
+        }
+        if lang is not None: options["lang"] = lang
+
+        resp = self._call_request("forecast.json", options)
+        forecast = ForecastData(resp[0], resp[1].status_code, None)
+        return forecast
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"

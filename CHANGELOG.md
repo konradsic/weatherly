@@ -1,6 +1,17 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
 
+### Version 0.3.0
+This version adds support for Forecast API with a lot of new features and classes.
+* Renamed `WeatherAPIClient` to `Client`
+* `ForecastData` is a return object from `Client.get_forecast_data`
+* `ForecastDay` is a component of `ForecastData`.
+* `ForecastHour` is a component of `ForecastDay`.
+* `AlertData` is an object representing a weather alert, e.g. a flood
+* Bugfixes as always
+
+It all adds up to the new, large update.
+
 ### Version 0.2.0
 This version introduced the `weatherly.LocationData` class, so you can retrieve location information.
 * NEW: `weatherly.CurrentWeatherData` now has a `location` attribute, which is exactly `weatherly.LocationData`

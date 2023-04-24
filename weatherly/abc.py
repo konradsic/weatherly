@@ -383,18 +383,15 @@ class ForecastDayModel(ResponseModel):
         Weather condition code
     hour_data: List[:class:`ForecastHourModel`]
         A list of :class:`ForecastHourModel` objects representing hourly weather data.
-        
-    .. note::
-        Below values can be ``None`` if user has disabled ``astro`` for astronomical data, ``aqi`` for air quality data.
-    sunrise: Optional[:class:`str`]
+    sunrise: :class:`str`
         Sunrise time
-    sunset: Optional[:class:`str`]
+    sunset: :class:`str`
         Sunset time
-    moonrise: Optional[:class:`str`]
+    moonrise: :class:`str`
         Moonrise time
-    moonset: Optional[:class:`str`]
+    moonset: :class:`str`
         Moonset time
-    moon_phase: Optional[:class:`str`]
+    moon_phase: :class:`str`
         Moon phases. Value returned:
         * New Moon
         * Waxing Crescent
@@ -404,10 +401,10 @@ class ForecastDayModel(ResponseModel):
         * Waning Gibbous
         * Last Quarter
         * Waning Crescent
-    moon_illumination: Optional[:class:`float`]
+    moon_illumination: :class:`float`
         Moon illumination as %
     aqi: Optional[:class:`AirQuality`]
-        Air Quality data as :class:`AirQuality` object.
+        Air Quality data as :class:`AirQuality` object. Can be ``None``
     """
     date: str
     date_epoch: int
