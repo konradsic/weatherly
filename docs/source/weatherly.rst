@@ -65,6 +65,9 @@ Exceptions
 .. autoexception:: WeatherlyException
     :members:
 
+.. autoexception:: InvalidDate
+    :members:
+
 .. autoexception:: WeatherAPIException
     :members:
 

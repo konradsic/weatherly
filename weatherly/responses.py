@@ -36,6 +36,8 @@ from typing import (
     Any,
     Union,
     Optional,
+    List, 
+    Iterator,   
 )
 
 __all__ = (
@@ -47,6 +49,7 @@ __all__ = (
     "ForecastHour",
     "AlertData",
 )
+
 
 GB_DEFRA_BAND = ("Low", "Low", "Low", "Moderate", "Moderate", "Moderate", "High", "High", "High", "Very High")
 
@@ -620,4 +623,23 @@ class ForecastData(ForecastModel):
                 self.alerts.extend(list([
                     AlertData(elem, status, code) for elem in v
                 ]))
+    
+    def iter_hours(self) -> Iterator[ForecastHour]:
+        """
+        Iterate over all possible hours from this class.
 
+        .. container:: operations
+
+            .. describe:: for x in y
+
+                Iterate over hour data from this instance.
+
+        Returns
+        -------------
+        Iterator[:class:`ForecastHour`]
+            A generator object you can iterate over made of :class:`ForecastHour`
+        """
+
+        for day in self.forecast_days:
+            for hour in day.hour_data:
+                yield hour

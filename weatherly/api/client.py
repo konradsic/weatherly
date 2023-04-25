@@ -22,34 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .core import BaseAPIClient
-from ..enums import Languages
-from ..responses import (
-    CurrentWeatherData, 
-    LocationData, 
-    ForecastData
-)
-from ..errors import (
-    WeatherAPIException,
-    NoLocationFound,
-    InvalidAPIKey,
-    APILimitExceeded,
-    APIKeyDisabled,
-    AccessDenied,
-    InternalApplicationError
-)
-from .. import (
-    utils as utils
-)
+import datetime
+from typing import Any, Dict, List, Literal, Optional, Union
 
-from typing import (
-    Any,
-    Literal,
-    Dict,
-    Optional,
-    Union,
-    List
-)
+from .. import utils as utils
+from ..enums import Languages
+from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
+                      InternalApplicationError, InvalidAPIKey, InvalidDate,
+                      NoLocationFound, WeatherAPIException)
+from ..responses import CurrentWeatherData, ForecastData, LocationData
+from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "http://api.weatherapi.com/v1/"
 BOOL_REPLACE = {True: "yes", False: "no"}
@@ -279,6 +261,7 @@ class Client(BaseAPIClient):
     def get_forecast_data(
         self,
         query: str, 
+        days: int,
         *,
         aqi: Optional[bool] = None,
         alerts: Optional[bool] = None,
@@ -292,6 +275,8 @@ class Client(BaseAPIClient):
         -------------
         query: :class:`str`
             Query string, location you want to get forecast data for
+        days: :class:`int`
+            Number of days of weather forecast. Value ranges from 1 to 10
         aqi: Optional[:class:`bool`]
             Enable/Disable Air Quality data. Defaults to ``None`` (will use client's default)
         alerts: Optional[:class:`bool`]
@@ -328,6 +313,7 @@ class Client(BaseAPIClient):
             "aqi": aqi or self.aqi,
             "q": query,
             "alerts": alerts or self.kwargs.get("alerts"),
+            "days": days,
             **kwargs
         }
         if lang is not None: options["lang"] = lang
@@ -335,10 +321,92 @@ class Client(BaseAPIClient):
         resp = self._call_request("forecast.json", options)
         forecast = ForecastData(resp[0], resp[1].status_code, None)
         return forecast
+
+    def get_historical_data(
+        self,
+        query: str,
+        date: str,
+        *,
+        aqi: Optional[bool] = None,
+        alerts: Optional[bool] = None,
+        lang: Optional[Union[str, Languages]] = None,
+        **kwargs: Dict[str, Any]
+    ) -> ForecastData:
+        """
+        Retrieve historical data for given day and query. Uses History API.
+
+        Parameters
+        -----------------
+        query: :class:`str`
+            Query string, location you want to get forecast data for
+        date: :class:`str`
+            A date string in format yyyy-mm-dd representing the day you want to get data for
+        aqi: Optional[:class:`bool`]
+            Enable/Disable Air Quality data. Defaults to ``None`` (will use client's default)
+        alerts: Optional[:class:`bool`]
+            Enable/Disable alerts data. Defaults to ``None`` (will use client's default)
+        lang: Optional[Union[:class`str`, :class`Languages`]]
+            Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
+            To get a list of languages visit :class:`Languages`.
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+        
+        Returns
+        ----------
+        :class:`ForecastData`
+            Forecast data for given day and query.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        :exc:`InvalidDate`
+            Raised when the ``date`` parameter is invalid (doesn't match the format or isn't a date before (or) today)
+        """
+        options = {
+            "aqi": aqi or self.aqi,
+            "q": query,
+            "alerts": alerts or self.kwargs.get("alerts"),
+            "dt": date,
+            **kwargs
+        }
+        if lang is not None: options["lang"] = lang
+
+        # check if given date is really "historical"
+        try:
+            splitted = date.split("-")
+            datetuple = datetime.datetime(
+                int(splitted[0]), 
+                int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
+                int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
+                0,0)
+            epoch = datetuple.timestamp()
+        except Exception as exc:
+            raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
+
+        now = datetime.datetime.timestamp(datetime.datetime.utcnow())
+
+        if epoch > now: raise InvalidDate("Date should be before current time, switch from History API to Future to use future dates.")
+
+        resp = self._call_request("history.json", options)
+        history = ForecastData(resp[0], resp[1].status_code, None)
+        return history
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
     
     def __repr__(self):
-        return repr(f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>")
+        return repr(self.__str__())
     

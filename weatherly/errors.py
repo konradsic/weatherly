@@ -41,6 +41,14 @@ class WeatherlyException(Exception):
     """
     pass
 
+class InvalidDate(WeatherlyException):
+    """
+    Raised when a date (for History/Future API) is invalid.
+
+    Inherits from :class:`WeatherlyException`.
+    """
+    pass
+
 class WeatherAPIException(WeatherlyException): 
     """
     The base class for :class:`Client` weather requests exceptions.

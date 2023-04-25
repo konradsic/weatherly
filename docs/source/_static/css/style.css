@@ -9,6 +9,14 @@
     margin-bottom: 2rem;
 }
 
+html[data-theme="dark"] {
+    --op-border-color: #454545;
+}
+
+html[data-theme="light"] {
+    --op-border-color: #ababab;
+}
+
 .py-attribute-table-entry {
     list-style: None;
 }
@@ -34,4 +42,10 @@
 
 li.toc-h3.nav-item.toc-entry {
     display: block;
+}
+
+.container.operations {
+    padding: 3px 7px;
+    border-radius: 5px;
+    border: 1px solid var(--op-border-color);
 }
