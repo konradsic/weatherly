@@ -4,7 +4,7 @@ In this file you can view the changelog, including updates and changes that were
 ### Version 0.4.0
 This version adds support for History API with some new, cool features
 * New exception: `weatherly.InvalidDate`, raised from `weatherly.get_historical_data` when the date is invalid
-* `weatherly.get_historical_data` : you can now get historical forecast data as `ForecastData` object
+* `client.get_historical_data` assuming that *client* is an instance of `weatherly.Client` : you can now get historical forecast data as `ForecastData` object
 * `weatherly.ForecastData.iter_hours` : an iterator that lets you easily iterate over every hour data from the class.
 
 Improvements to the documentation:
