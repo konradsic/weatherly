@@ -8,25 +8,29 @@ with open('weatherly/__init__.py') as f:
 if not version:
     raise RuntimeError('version is not set')
 
-readme = ""
-with open("README.rst", encoding="utf-8") as readme_file: 
+readme = ''
+with open('README.rst', encoding='utf-8') as readme_file: 
     readme = readme_file.read()
 
 
 requirements = []
-with open("requirements.txt") as requirements_file: 
+with open('requirements.txt') as requirements_file: 
     requirements = requirements_file.read().splitlines()
 
 extras_require = {
-    "docs": [
-        "sphinx==5.3.0",
-        "sphinx_book_theme==1.0.1"
+    'docs': [
+        'sphinx==5.3.0',
+        'sphinx_book_theme==1.0.1'
+    ],
+    'test': [
+        'pytest',
+        'pytest-cov'
     ]
 }
 
 packages = [
-    "weatherly",
-    "weatherly.api",
+    'weatherly',
+    'weatherly.api',
 ]
 
 setup(
@@ -53,7 +57,7 @@ setup(
         'Natural Language :: English',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.10',
-        "Programming Language :: Python :: 3.11",
+        'Programming Language :: Python :: 3.11',
         'Topic :: Internet',
         'Topic :: Software Development :: Libraries',
         'Topic :: Software Development :: Libraries :: Python Modules',
