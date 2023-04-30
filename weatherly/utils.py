@@ -29,6 +29,9 @@ from typing import (
 )
 from .enums import Languages
 
+gray = "#535353"
+white = "#ffffff"
+
 def parse_kwargs_to_urlargs(kwargs: Dict[str, Any]) -> str:
     """
     Parses keyword arguments (kwargs) to format fitting URLs

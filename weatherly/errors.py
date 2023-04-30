@@ -31,6 +31,7 @@ __all__ = (
     "APIKeyDisabled",
     "AccessDenied",
     "InternalApplicationError",
+    "InvalidDate",
 )
 
 class WeatherlyException(Exception):

@@ -1,7 +1,7 @@
 """
 weatherly/api
 --------------
-An package extension to weatherly providing access to WeatherAPI (requests, client, etc.)
+A package extension to weatherly providing access to WeatherAPI (requests, client, etc.)
 
 
 MIT License

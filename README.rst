@@ -15,7 +15,7 @@
 
 Weatherly is a simple package that retrieves weather data from WeatherAPI.com. It provides an easy to use interface to access current and historical weather data for a specific location.
 
-📜 Features
+Features
 ---------------
 * Easy to use,
 * Intuitive design,
@@ -23,7 +23,7 @@ Weatherly is a simple package that retrieves weather data from WeatherAPI.com. I
 * Modern and typed Python package,
 * Support for languages (provided by WeatherAPI)
 
-💻 Code example
+Code example
 ---------------------
 
 .. code:: python
@@ -39,10 +39,10 @@ Weatherly is a simple package that retrieves weather data from WeatherAPI.com. I
     current_weather = client.get_current_weather(query="London")
 
     # getting forecast info
-    forecast = client.get_forecast_data(query="Paris")
+    forecast = client.get_forecast_data(query="Paris", days=3)
 
     # historical data
-    history = client.get_historical_data(query="48.8567,2.3508") # query could also be latitude,longitude
+    history = client.get_historical_data(query="48.8567,2.3508", date="2010-01-01") # query could also be latitude,longitude
 
     # marine data
     marine = client.get_marine_data(query="Madrid")

@@ -30,7 +30,7 @@ from ..enums import Languages
 from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
-from ..responses import CurrentWeatherData, ForecastData, LocationData
+from ..responses import CurrentWeatherData, ForecastData, LocationData, FutureData
 from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "http://api.weatherapi.com/v1/"
@@ -403,6 +403,81 @@ class Client(BaseAPIClient):
         resp = self._call_request("history.json", options)
         history = ForecastData(resp[0], resp[1].status_code, None)
         return history
+        
+    def get_future_data(
+        self,
+        query: str,
+        date: str,
+        *,
+        lang: Optional[Union[str, Languages]] = None,
+        **kwargs: Dict[str, Any]
+    ) -> FutureData:
+        """
+        Retrieve future data for given day and query. Uses Future API.
+
+        Parameters
+        -----------------
+        query: :class:`str`
+            Query string, location you want to get forecast data for
+        date: :class:`str`
+            A date string in format yyyy-mm-dd representing the day you want to get data for
+        lang: Optional[Union[:class`str`, :class`Languages`]]
+            Language from the :class:`Languages` enum or a string representing the language or language code (preferably).
+            To get a list of languages visit :class:`Languages`.
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+        
+        Returns
+        ----------
+        :class:`FutureData`
+            Forecast data for given day and query.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        :exc:`InvalidDate`
+            Raised when the ``date`` parameter is invalid (doesn't match the format or isn't a date after today)
+        """
+        options = {
+            "q": query,
+            "dt": date,
+            **kwargs
+        }
+        if lang is not None: options["lang"] = lang
+
+        # check if given date is really "historical"
+        try:
+            splitted = date.split("-")
+            datetuple = datetime.datetime(
+                int(splitted[0]), 
+                int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
+                int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
+                0,0)
+            epoch = datetuple.timestamp()
+        except Exception as exc:
+            raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
+
+        now = datetime.datetime.timestamp(datetime.datetime.utcnow())
+
+        if epoch < now: raise InvalidDate("Date should be after current time, switch from Future API to History to use past dates.")
+
+        resp = self._call_request("future.json", options)
+        future = FutureData(resp[0], resp[1].status_code, None)
+        return future
+        
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"

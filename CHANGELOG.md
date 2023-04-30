@@ -1,6 +1,11 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
- 
+
+### Version 0.5.0
+This version adds support for Future API with 3 new classes and a client method.
+* Added `Client(...).get_future_data()` for getting future weather data.
+* Added `FutureData`, `FutureDay` and `FutureHour` classes because returned data from Future API is slightly different from forecast data standard.
+
 ### Version 0.4.0
 This version adds support for History API with some new, cool features
 * New exception: `weatherly.InvalidDate`, raised from `weatherly.get_historical_data` when the date is invalid

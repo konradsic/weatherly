@@ -23,8 +23,10 @@ author = 'konradsic'
 extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
+    'sphinx.ext.extlinks',
     'sphinx.ext.autodoc',
     'sphinx.ext.napoleon',
+    'sphinx.ext.intersphinx',
     'attributetable',
 ]
 
@@ -51,3 +53,7 @@ html_theme_options = {
     'show_navbar_depth': 2,
     'show_toc_level': 2,
 }
+
+intersphinx_mapping = {"py": ("https://docs.python.org/3", None)}
+pygments_style = "sphinx"
+pygments_dark_style = "github-dark"

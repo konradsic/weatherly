@@ -17,7 +17,7 @@ To create a basic client, run
     client = weatherly.WeatherAPIClient(api_key="your-api-key")
 
 .. note::
-    You need to create a application on WeatherAPI.com to use this module. To get an api key, head to `WeatherAPI.com <https://weatherapi.com/>`_, click singup and create an account\n
+    You need to create a application on WeatherAPI.com to use this module. To get an api key, head to `WeatherAPI.com <https://weatherapi.com/>`_, click singup and create an account
 
     After creating an account, head to https://www.weatherapi.com/my/ and copy you API key.
 

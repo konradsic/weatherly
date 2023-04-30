@@ -39,19 +39,12 @@ body:
     validations:
       required: false
   - type: textarea
-    id: your-solution
+    id: ideal-solution
     attributes:
-      label: Your solution
-      description: Please describe your solution to the problem
+      label: Ideal solution
+      description: Please describe how an ideal solution would look like. You can also provide code examples, snippets etc. 
     validations:
       required: true
-  - type: textarea
-    id: code-sketch
-    attributes:
-      label: Code sketch
-      description: If possible, please enter your ideas on how the code implementing your solution could look.
-    validations:
-      required: false
   - type: textarea
     id: additional-context
     attributes:
