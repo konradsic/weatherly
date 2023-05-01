@@ -64,16 +64,6 @@ Responses from WeatherAPI
 .. autoclass:: FutureData
     :members:
 
-.. attributetable:: FutureDay
-
-.. autoclass:: FutureDay
-    :members:
-
-.. attributetable:: FutureHour
-
-.. autoclass:: FutureHour
-    :members:
-
 
 Exceptions
 ===============

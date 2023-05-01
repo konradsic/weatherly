@@ -1,6 +1,10 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
 
+### Version 0.5.1
+This version removes unnecessary classes `FutureDay` and `FutureHour`. They have been removed because only one parameter was not returned from the Future API. 
+So now `ForecastDay` and `ForecastHour` have the `uv` parameter optional. Also, some changes have been made to the documentation and docs build command.
+
 ### Version 0.5.0
 This version adds support for Future API with 3 new classes and a client method.
 * Added `Client(...).get_future_data()` for getting future weather data.
