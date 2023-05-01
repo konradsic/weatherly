@@ -12,6 +12,10 @@ Clients
 
 .. autoclass:: Client
     :members:
+    :exclude-members: event
+
+    .. automethod:: Client.event()
+        :decorator:
 
 Enums
 =========

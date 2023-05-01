@@ -20,7 +20,8 @@ with open('requirements.txt') as requirements_file:
 extras_require = {
     'docs': [
         'sphinx==5.3.0',
-        'sphinx_book_theme==1.0.1'
+        'sphinx_book_theme==1.0.1',
+        'sphinxcontrib_trio==1.1.2'
     ],
     'test': [
         'pytest',

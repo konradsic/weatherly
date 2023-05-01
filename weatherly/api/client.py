@@ -143,6 +143,24 @@ class Client(BaseAPIClient):
             else: raise WeatherAPIException(status, code, msg)
 
         return resp
+    
+    def event(self):
+        """A decorator that turns a function into an event. For example
+
+        .. code:: python
+
+            import weatherly
+            client = weatherly.Client(api_key=...)
+
+            @client.event
+            def on_error(payload):
+                print(f"An error occured! Payload: {payload}")
+        
+        In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
+        """
+        def wrapper(func):
+            raise NotImplementedError
+        return wrapper
 
     def set_language(self, lang: Union[str, Languages]) -> Optional[Languages]:
         """
@@ -478,6 +496,38 @@ class Client(BaseAPIClient):
         future = FutureData(resp[0], resp[1].status_code, None)
         return future
         
+    def get_astronomical_data(
+        self,
+        query: str,
+        date: str,
+        **kwargs: Dict[str, Any]
+    ): 
+        raise NotImplementedError
+
+    def get_marine_data(
+        self,
+        query: str,
+        *,
+        tides: Optional[bool],
+        **kwargs: Dict[str, Any]
+    ):
+        raise NotImplementedError
+
+    def get_ip_data(
+        self,
+        ip_address: str,
+        **kwargs: Dict[str, Any]
+    ):
+        raise NotImplementedError
+
+    def get_sports_data(
+        self,
+        query: str,
+        **kwargs: Dict[str, Any]
+    ):
+        raise NotImplementedError
+
+
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
