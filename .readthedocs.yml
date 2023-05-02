@@ -3,6 +3,9 @@ formats: []
 
 build:
   image: latest
+  os: ubuntu-20.04
+  tools:
+    python: 3.10
 
 sphinx:
   configuration: docs/source/conf.py
@@ -10,7 +13,6 @@ sphinx:
   builder: html
 
 python:
-  version: 3.8
   install:
     - method: pip
       path: .
