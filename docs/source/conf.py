@@ -56,5 +56,14 @@ html_theme_options = {
 }
 
 intersphinx_mapping = {"py": ("https://docs.python.org/3", None)}
-pygments_style = "sphinx"
-pygments_dark_style = "github-dark"
+pygments_style = "zenburn"
+# styles: ['default', 'emacs', 'friendly', 'friendly_grayscale', 'colorful', 'autumn', 'murphy', 'manni', 'material', 'monokai', 
+# 'perldoc', 'pastie', 'borland', 'trac', 'native', 'fruity', 'bw', 
+#'vim', 'vs', 'tango', 'rrt', 'xcode', 'igor', 'paraiso-light', 'paraiso-dark', 'lovelace', 'algol', 'algol_nu', '
+# arduino', 'rainbow_dash', 'abap', 'solarized-dark', 'solarized-light', 'sas', 'staroffice', 'stata', 'stata-light', 'stata-dark', 
+# 'inkpot', 'zenburn', 'gruvbox-dark', 'gruvbox-light', 'dracula', 'one-dark', 'lilypond', 'nord', 'nord-darker', 'github-dark', 
+#'a11y-dark', 'a11y-high-contrast-dark', 'a11y-high-contrast-light', 'a11y-light', 'blinds-dark', 'blinds-light', 'github-dark', 
+# 'github-dark-colorblind', 'github-dark-high-contrast', 'github-light', 'github-light-colorblind', 'github-light-high-contrast', 
+# 'gotthard-dark', 'gotthard-light', 'greative', 'pitaya-smoothie']
+pygments_dark_style = "zenburn"
+html_favicon = "./images/weatherly_icon.ico"
