@@ -1,24 +1,51 @@
+:root {
+    --grey: #212121;
+    --class-color-dark: #eaeaea;
+    --class-color-light: #1c1c1c;
+}
+
+:root[data-theme="dark"] {
+    --pst-color-background: var(--grey);
+    --pst-color-inline-code: var(--class-color-dark);
+    --border-color: #454545;
+    --bgcolor-class: #353535;
+}
+
+:root[data-theme="light"] {
+    --border-color: #ababab;
+    --pst-color-inline-code: var(--class-color-light);
+    --bgcolor-class: #d8d8d8;
+}
+
 /* Attributable stuff */
 .py-attribute-table {
     display: flex;
     flex-wrap: wrap;
     background-color: var(--color-api-background);
     border-radius: 0 0 3px 3px;
-    border-left: #0e84b5 solid 3px;
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
-
-html[data-theme="dark"] {
-    --op-border-color: #454545;
-}
-
-html[data-theme="light"] {
-    --op-border-color: #ababab;
-}
-
 .py-attribute-table-entry {
     list-style: None;
+    padding-left: 15px;
+    border-left: 3px solid var(--border-color);
+}
+
+.py-attribute-table-entry:hover {
+    border-left: 3px solid #0e84b5;
+    background-color: var(--border-color);
+}
+
+.py-attribute-table-entry > .reference.internal {
+    color: var(--pst-color-inline-code);
+}
+
+.py-attribute-table-entry:hover > .reference.internal {
+    color: #0e84b5;
+}
+.py-attribute-table-entry:hover > .reference.internal:hover {
+    text-decoration: none;
 }
 
 .py-attribute-table-column {
@@ -38,6 +65,7 @@ html[data-theme="light"] {
 .sig.sig-object {
     padding: 2px 7px;
     border-radius: 5px;
+    background-color: var(--bgcolor-class);
 }
 
 li.toc-h3.nav-item.toc-entry {
@@ -47,5 +75,17 @@ li.toc-h3.nav-item.toc-entry {
 .container.operations {
     padding: 3px 7px;
     border-radius: 5px;
-    border: 1px solid var(--op-border-color);
+    border: 1px solid var(--border-color);
+}
+
+h1, h2 {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.sig-name.descname > span.pre {
+    font-weight: 600;
+}
+
+.bd-sidebar-primary {
+    margin-left: 0;
 }

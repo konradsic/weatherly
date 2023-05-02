@@ -11,5 +11,5 @@ window.addEventListener('load', function() {
    let tables = document.getElementsByClassName('py-attribute-table');
 
    for (let table of tables) 
-      document.getElementById(table.getAttribute('data-move-to-id')).append(table);
+      document.getElementById(table.getAttribute('data-move-to-id')).parentElement.querySelector("dd").prepend(table);
 });
