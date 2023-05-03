@@ -22,16 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from .abc import (
-    CurrentWeather, 
-    LocationModel, 
-    AirQuality, 
-    ForecastDayModel, 
-    ForecastHourModel, 
-    ForecastModel,
-    AlertModel,
-    FutureModel
-)
 from typing import (
     Dict,
     Any,
@@ -55,7 +45,30 @@ __all__ = (
 
 GB_DEFRA_BAND = ("Low", "Low", "Low", "Moderate", "Moderate", "Moderate", "High", "High", "High", "Very High")
 
-class CurrentWeatherData(CurrentWeather):
+class APIResponse:
+    """
+    Represents a basic response from Weather API
+    
+    Attributes
+    ----------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int]
+    ) -> None:
+        self.raw = raw
+        self.status = status
+        self.code = code
+
+class CurrentWeatherData(APIResponse):
     """
     Current weather data, a common return type from methods that requests this from WeatherAPI.com.
     
@@ -120,11 +133,7 @@ class CurrentWeatherData(CurrentWeather):
         status: int,
         code: Optional[int]
     ) -> None:
-        super().__init__()
-        
-        self.status = status
-        self.code = code
-        self.raw = raw
+        super().__init__(raw, status, code)
         
         self.location = LocationData(raw["location"], status, code)
         raw = raw["current"]
@@ -151,7 +160,7 @@ class CurrentWeatherData(CurrentWeather):
         self.feelslike_f = raw["feelslike_f"]
         self.uv = raw["uv"]
 
-class LocationData(LocationModel):
+class LocationData(APIResponse):
     """
     Location data, returned with most requests.
     
@@ -188,9 +197,7 @@ class LocationData(LocationModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
 
         self.id = raw.get('id', None)
         self.name = raw['name']
@@ -203,7 +210,7 @@ class LocationData(LocationModel):
         self.localtime_formatted = raw.get('localtime', None)
 
 
-class AirQualityData(AirQuality):
+class AirQualityData(APIResponse):
     """
     Attributes
     --------------
@@ -253,9 +260,7 @@ class AirQualityData(AirQuality):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
         
         self.co = raw["co"]
         self.o3 = raw["o3"]
@@ -268,7 +273,7 @@ class AirQualityData(AirQuality):
 
         self.gb_defra_band = GB_DEFRA_BAND[self.gb_defra_index-1]
 
-class AlertData(AlertModel):
+class AlertData(APIResponse):
     """
     An alert from WeatherAPI
 
@@ -313,9 +318,7 @@ class AlertData(AlertModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
         
         self.headline = raw["headline"]
         self.msg_type = raw["msgType"]
@@ -331,7 +334,7 @@ class AlertData(AlertModel):
         self.description = raw["desc"]
         self.instruction = raw["instruction"]
 
-class ForecastHour(ForecastHourModel):
+class ForecastHour(APIResponse):
     """
     Forecast hour, an element of :class:`ForecastDay`
     
@@ -422,9 +425,7 @@ class ForecastHour(ForecastHourModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
 
         self.time_epoch = raw["time_epoch"]
         self.time = raw["time"]
@@ -465,7 +466,7 @@ class ForecastHour(ForecastHourModel):
         if raw.get("air_quality"): self.aqi = AirQualityData(raw["air_quality"], status, code)
         else: self.aqi = None
     
-class ForecastDay(ForecastDayModel):
+class ForecastDay(APIResponse):
     """
     A forecast day, element of :class:`ForecastData`
 
@@ -546,9 +547,7 @@ class ForecastDay(ForecastDayModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
         self.date = raw["date"]
         self.date_epoch = raw["date_epoch"]
         
@@ -587,7 +586,7 @@ class ForecastDay(ForecastDayModel):
         self.moon_illumination = raw["astro"]["moon_illumination"]
 
     
-class ForecastData(ForecastModel):
+class ForecastData(APIResponse):
     """
     Forecast data returned from Forecast API
     
@@ -612,9 +611,7 @@ class ForecastData(ForecastModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
         
         self.location = LocationData(raw["location"], status, code)
         self.forecast_days = list([ForecastDay(elem, status, code) for elem in raw["forecast"]["forecastday"]])
@@ -648,7 +645,7 @@ class ForecastData(ForecastModel):
                 yield hour
 
 
-class FutureData(FutureModel):
+class FutureData(APIResponse):
     """
     Forecast data returned from Future API
     
@@ -671,9 +668,7 @@ class FutureData(FutureModel):
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        super().__init__(raw, status, code)
         
         self.location = LocationData(raw["location"], status, code)
         self.day = ForecastDay(raw["forecast"]["forecastday"][0], status, code)
