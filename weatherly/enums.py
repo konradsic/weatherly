@@ -26,6 +26,7 @@ from enum import Enum
 
 __all__ = (
     "Languages",
+    "SportsEventType",
 )
 
 class Languages(Enum):
@@ -157,3 +158,20 @@ class Languages(Enum):
     Xiang: str = "zh_hsn"
     YueCantonese: str =	"zh_yue"
     Zulu: str = "zu"
+
+class SportsEventType(Enum):
+    """
+    An enum representing type of sports event
+
+    Attributes
+    ---------------
+    football
+        Football event
+    cricket
+        Cricket event
+    golf
+        Golf event
+    """
+    football = 1
+    cricket = 2
+    golf = 3

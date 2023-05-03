@@ -159,9 +159,7 @@ class Client(BaseAPIClient):
         
         In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
         """
-        def wrapper(func):
-            raise NotImplementedError
-        return wrapper
+        raise NotImplementedError
 
     def set_language(self, lang: Union[str, Languages]) -> Optional[Languages]:
         """

@@ -36,6 +36,9 @@ Enums
 .. autoclass:: Languages
     :members:
 
+.. autoclass:: SportsEventType
+    :members:
+
 
 Responses from WeatherAPI
 ============================
