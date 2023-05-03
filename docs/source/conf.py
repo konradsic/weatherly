@@ -55,5 +55,5 @@ html_theme_options = {
     'show_toc_level': 3,
 }
 
-intersphinx_mapping = {"py": ("https://docs.python.org/3", None)}
-html_favicon = "./images/weatherly_icon.ico"
+intersphinx_mapping = {'py': ('https://docs.python.org/3', None)}
+html_favicon = './images/weatherly_icon.ico'
