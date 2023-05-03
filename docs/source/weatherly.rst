@@ -68,6 +68,16 @@ Responses from WeatherAPI
 .. autoclass:: FutureData
     :members:
 
+.. attributetable:: IPData
+
+.. autoclass:: IPData
+    :members:
+
+.. attributetable:: AstronomicalData
+
+.. autoclass:: AstronomicalData
+    :members:
+
 
 Exceptions
 ===============

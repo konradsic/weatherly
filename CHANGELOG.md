@@ -1,6 +1,13 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to the package.
 
+### Version 0.6.0
+This version adds support for the Astronomy API and IP Lookup API. Two new methods for the `weatherly.Client` were implemented:
+* `get_ip_data` for retrieving IP information
+* `get_astronomical_data` for retrieving astronomical data (e.g. sunrise)
+
+Slight improvements to the documentation were made, removed `abc.py` as there was no real reason for it to exist. All responses are in `responses.py` whatsoever.
+
 ### Version 0.5.1
 This version removes unnecessary classes `FutureDay` and `FutureHour`. They have been removed because only one parameter was not returned from the Future API. 
 So now `ForecastDay` and `ForecastHour` have the `uv` parameter optional. Also, some changes have been made to the documentation and docs build command.

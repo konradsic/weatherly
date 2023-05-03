@@ -30,7 +30,8 @@ from ..enums import Languages
 from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
-from ..responses import CurrentWeatherData, ForecastData, LocationData, FutureData
+from ..responses import (AstronomicalData, CurrentWeatherData, ForecastData,
+                         FutureData, IPData, LocationData)
 from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
@@ -448,7 +449,7 @@ class Client(BaseAPIClient):
         Returns
         ----------
         :class:`FutureData`
-            Forecast data for given day and query.
+            Future data for given day and query.
 
         Raises
         ---------
@@ -501,8 +502,49 @@ class Client(BaseAPIClient):
         query: str,
         date: str,
         **kwargs: Dict[str, Any]
-    ): 
-        raise NotImplementedError
+    ) -> AstronomicalData:
+        """
+        Get astronomical data from Astronomy API
+
+        Parameters
+        -------------
+        query: :class:`str`
+            Query string, location you want to get forecast data for
+        date: :class:`str`
+            Date in format yyyy-MM-dd and on or after 1st Jan, 2010 (2010-01-01)
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+            
+        Returns
+        ----------
+        :class:`AstronomicalData`
+            Fetched astronomical data as a class.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        options = {
+            "q": query,
+            "dt": date,
+            **kwargs
+        }
+        resp = self._call_request("astronomy.json", options)
+        astro = AstronomicalData(resp[0], resp[1].status_code, None)
+        return astro
 
     def get_marine_data(
         self,
@@ -517,8 +559,46 @@ class Client(BaseAPIClient):
         self,
         ip_address: str,
         **kwargs: Dict[str, Any]
-    ):
-        raise NotImplementedError
+    ) -> IPData:
+        """
+        Look for data for the given IP address.
+
+        Parameters
+        -------------
+        ip_address: :class:`str`
+            IP address you want to get data for. Can be ipv4 or ipv6
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+            
+        Returns
+        ----------
+        :class:`IPData`
+            Fetched IP data as a class.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when either IP address was invalid or no matching location was found.
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        options = {
+            "q": ip_address,
+            **kwargs
+        }
+        resp = self._call_request("ip.json", options)
+        ip = IPData(resp[0], resp[1].status_code, None)
+        return ip
 
     def get_sports_data(
         self,
