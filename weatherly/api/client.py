@@ -33,7 +33,7 @@ from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
 from ..responses import CurrentWeatherData, ForecastData, LocationData, FutureData
 from .core import BaseAPIClient
 
-WEATHERAPI_BASE_URL = "http://api.weatherapi.com/v1/"
+WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
 BOOL_REPLACE = {True: "yes", False: "no"}
 
 __all__ = (

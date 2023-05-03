@@ -64,9 +64,9 @@ class APIResponse:
         status: int,
         code: Optional[int]
     ) -> None:
-        self.raw = raw
-        self.status = status
-        self.code = code
+        self.raw: Dict[str, Any] = raw
+        self.status: int = status
+        self.code: Optional[int] = code
 
 class CurrentWeatherData(APIResponse):
     """
@@ -135,30 +135,30 @@ class CurrentWeatherData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
         
-        self.location = LocationData(raw["location"], status, code)
+        self.location: LocationData = LocationData(raw["location"], status, code)
         raw = raw["current"]
         
-        self.aqi = AirQualityData(raw["air_quality"], status, code) if raw.get("air_quality") else None
-        self.last_updated_epoch = raw["last_updated_epoch"]
-        self.temp_c = raw["temp_c"]
-        self.temp_f = raw["temp_f"]
-        self.is_day = bool(raw["is_day"])
-        self.condition_text = raw["condition"]["text"]
-        self.condition_icon = raw["condition"]["icon"]
-        self.condition_code = raw["condition"]["code"]
-        self.wind_mph = raw["wind_mph"]
-        self.wind_kph = raw["wind_kph"]
-        self.wind_degree = raw["wind_degree"]
-        self.wind_dir = raw["wind_dir"]
-        self.pressure_mb = raw["pressure_mb"]
-        self.pressure_in = raw["pressure_in"]
-        self.precip_mm = raw["precip_mm"]
-        self.precip_in = raw["precip_in"]
-        self.humidity = raw["humidity"]
-        self.cloud = raw["cloud"]
-        self.feelslike_c = raw["feelslike_c"]
-        self.feelslike_f = raw["feelslike_f"]
-        self.uv = raw["uv"]
+        self.aqi: Optional[AirQualityData] = AirQualityData(raw["air_quality"], status, code) if raw.get("air_quality") else None
+        self.last_updated_epoch: int = raw["last_updated_epoch"]
+        self.temp_c: float = raw["temp_c"]
+        self.temp_f: float = raw["temp_f"]
+        self.is_day: bool = bool(raw["is_day"])
+        self.condition_text: str = raw["condition"]["text"]
+        self.condition_icon: str = raw["condition"]["icon"]
+        self.condition_code: int = raw["condition"]["code"]
+        self.wind_mph: float = raw["wind_mph"]
+        self.wind_kph: float = raw["wind_kph"]
+        self.wind_degree: int = raw["wind_degree"]
+        self.wind_dir: str = raw["wind_dir"]
+        self.pressure_mb: float = raw["pressure_mb"]
+        self.pressure_in: float = raw["pressure_in"]
+        self.precip_mm: float = raw["precip_mm"]
+        self.precip_in: float = raw["precip_in"]
+        self.humidity: int = raw["humidity"]
+        self.cloud: int = raw["cloud"]
+        self.feelslike_c: float = raw["feelslike_c"]
+        self.feelslike_f: float = raw["feelslike_f"]
+        self.uv: float = raw["uv"]
 
 class LocationData(APIResponse):
     """
@@ -199,15 +199,15 @@ class LocationData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
 
-        self.id = raw.get('id', None)
-        self.name = raw['name']
-        self.region = raw['region']
-        self.country = raw['country']
-        self.latitude = raw['lat']
-        self.longitude = raw['lon']
-        self.timezone_id = raw.get('tz_id', None)
-        self.localtime_epoch = raw.get('localtime_epoch')
-        self.localtime_formatted = raw.get('localtime', None)
+        self.id: int = raw.get('id', None)
+        self.name: str = raw['name']
+        self.region: str = raw['region']
+        self.country: str = raw['country']
+        self.latitude: float = raw['lat']
+        self.longitude: float = raw['lon']
+        self.timezone_id: str = raw.get('tz_id', None)
+        self.localtime_epoch: int = raw.get('localtime_epoch')
+        self.localtime_formatted: str = raw.get('localtime', None)
 
 
 class AirQualityData(APIResponse):
@@ -234,12 +234,12 @@ class AirQualityData(APIResponse):
         PM10 (μg/m3)
     us_epa_index: :class:`int`
         US - EPA standard.
-        * 1 means Good
-        * 2 means Moderate
-        * 3 means Unhealthy for sensitive group
-        * 4 means Unhealthy
-        * 5 means Very Unhealthy
-        * 6 means Hazardous
+            * 1 means Good
+            * 2 means Moderate
+            * 3 means Unhealthy for sensitive group
+            * 4 means Unhealthy
+            * 5 means Very Unhealthy
+            * 6 means Hazardous
     gb_defra_index: :class:`int`
         UK Defra Index
         
@@ -262,16 +262,16 @@ class AirQualityData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
         
-        self.co = raw["co"]
-        self.o3 = raw["o3"]
-        self.no2 = raw["no2"]
-        self.so2 = raw["so2"]
-        self.pm2_5 = raw["pm2_5"]
-        self.pm10 = raw["pm10"]
-        self.us_epa_index = raw["us-epa-index"]
-        self.gb_defra_index = raw["gb-defra-index"]
+        self.co: float = raw["co"]
+        self.o3: float = raw["o3"]
+        self.no2: float = raw["no2"]
+        self.so2: float = raw["so2"]
+        self.pm2_5: float = raw["pm2_5"]
+        self.pm10: float = raw["pm10"]
+        self.us_epa_index: int = raw["us-epa-index"]
+        self.gb_defra_index: int = raw["gb-defra-index"]
 
-        self.gb_defra_band = GB_DEFRA_BAND[self.gb_defra_index-1]
+        self.gb_defra_band: str = GB_DEFRA_BAND[self.gb_defra_index-1]
 
 class AlertData(APIResponse):
     """
@@ -320,19 +320,19 @@ class AlertData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
         
-        self.headline = raw["headline"]
-        self.msg_type = raw["msgType"]
-        self.severity = raw["severity"]
-        self.urgency = raw["urgency"]
-        self.areas = raw["areas"]
-        self.category = raw["category"]
-        self.certainty = raw["certainty"]
-        self.event = raw["event"]
-        self.note = raw["note"]
-        self.effective = raw["effective"]
-        self.expires = raw["expires"]
-        self.description = raw["desc"]
-        self.instruction = raw["instruction"]
+        self.headline: str = raw["headline"]
+        self.msg_type: str = raw["msgType"]
+        self.severity: str = raw["severity"]
+        self.urgency: str = raw["urgency"]
+        self.areas: str = raw["areas"]
+        self.category: str = raw["category"]
+        self.certainty: str = raw["certainty"]
+        self.event: str = raw["event"]
+        self.note: str = raw["note"]
+        self.effective: str = raw["effective"]
+        self.expires: str = raw["expires"]
+        self.description: str = raw["desc"]
+        self.instruction: str = raw["instruction"]
 
 class ForecastHour(APIResponse):
     """
@@ -427,44 +427,45 @@ class ForecastHour(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
 
-        self.time_epoch = raw["time_epoch"]
-        self.time = raw["time"]
-        self.temp_c = raw["temp_c"]
-        self.temp_f = raw["temp_f"]
-        self.condition_text = raw["condition"]["text"]
-        self.condition_icon = raw["condition"]["icon"]
-        self.condition_code = raw["condition"]["code"]
-        self.wind_mph = raw["wind_mph"]
-        self.wind_kph = raw["wind_kph"]
-        self.wind_degree = raw["wind_degree"]
-        self.wind_dir = raw["wind_dir"]
-        self.pressure_mb = raw["pressure_mb"]
-        self.pressure_in = raw["pressure_in"]
-        self.precip_mm = raw["precip_mm"]
-        self.precip_in = raw["precip_in"]
-        self.humidity = raw["humidity"]
-        self.cloud = raw["cloud"]
-        self.feelslike_c = raw["feelslike_c"]
-        self.feelslike_f = raw["feelslike_f"]
-        self.windchill_c = raw["windchill_c"]
-        self.windchill_f = raw["windchill_f"]
-        self.heatindex_c = raw["heatindex_c"]
-        self.heatindex_f = raw["heatindex_f"]
-        self.dewpoint_c = raw["dewpoint_c"]
-        self.dewpoint_f = raw["dewpoint_f"]
-        self.will_it_rain = bool(raw["will_it_rain"])
-        self.will_it_snow = bool(raw["will_it_snow"])
-        self.is_day = bool(raw["is_day"])
-        self.vis_km = raw["vis_km"]
-        self.vis_miles = raw["vis_miles"]
-        self.chance_of_rain = raw["chance_of_rain"]
-        self.chance_of_snow = raw["chance_of_snow"]
-        self.gust_mph = raw["gust_mph"]
-        self.gust_kph = raw["gust_kph"]
-        self.uv = raw.get("uv")
+        self.time_epoch: int = raw["time_epoch"]
+        self.time: str = raw["time"]
+        self.temp_c: float = raw["temp_c"]
+        self.temp_f: float = raw["temp_f"]
+        self.condition_text: str = raw["condition"]["text"]
+        self.condition_icon: str = raw["condition"]["icon"]
+        self.condition_code: int = raw["condition"]["code"]
+        self.wind_mph: float = raw["wind_mph"]
+        self.wind_kph: float = raw["wind_kph"]
+        self.wind_degree: int = raw["wind_degree"]
+        self.wind_dir: str = raw["wind_dir"]
+        self.pressure_mb: float = raw["pressure_mb"]
+        self.pressure_in: float = raw["pressure_in"]
+        self.precip_mm: float = raw["precip_mm"]
+        self.precip_in: float = raw["precip_in"]
+        self.humidity: int = raw["humidity"]
+        self.cloud: int = raw["cloud"]
+        self.feelslike_c: float = raw["feelslike_c"]
+        self.feelslike_f: float = raw["feelslike_f"]
+        self.windchill_c: float = raw["windchill_c"]
+        self.windchill_f: float = raw["windchill_f"]
+        self.heatindex_c: float = raw["heatindex_c"]
+        self.heatindex_f: float = raw["heatindex_f"]
+        self.dewpoint_c: float = raw["dewpoint_c"]
+        self.dewpoint_f: float = raw["dewpoint_f"]
+        self.will_it_rain: bool = bool(raw["will_it_rain"])
+        self.will_it_snow: bool = bool(raw["will_it_snow"])
+        self.is_day: bool = bool(raw["is_day"])
+        self.vis_km: float = raw["vis_km"]
+        self.vis_miles: float = raw["vis_miles"]
+        self.chance_of_rain: int = raw["chance_of_rain"]
+        self.chance_of_snow: int = raw["chance_of_snow"]
+        self.gust_mph: float = raw["gust_mph"]
+        self.gust_kph: float = raw["gust_kph"]
+        self.uv: Optional[float] = raw.get("uv")
         
-        if raw.get("air_quality"): self.aqi = AirQualityData(raw["air_quality"], status, code)
-        else: self.aqi = None
+        self.aqi: Optional[AirQualityData] = None
+        if raw.get("air_quality"): 
+            self.aqi: Optional[AirQualityData] = AirQualityData(raw["air_quality"], status, code)
     
 class ForecastDay(APIResponse):
     """
@@ -518,26 +519,8 @@ class ForecastDay(APIResponse):
         Weather condition code
     hour_data: List[:class:`ForecastHour`]
         A list of :class:`ForecastHour` objects representing hourly weather data.
-    sunrise: :class:`str`
-        Sunrise time
-    sunset: :class:`str`
-        Sunset time
-    moonrise: :class:`str`
-        Moonrise time
-    moonset: :class:`str`
-        Moonset time
-    moon_phase: :class:`str`
-        Moon phases. Value returned:
-            * New Moon
-            * Waxing Crescent
-            * First Quarter
-            * Waxing Gibbous
-            * Full Moon
-            * Waning Gibbous
-            * Last Quarter
-            * Waning Crescent
-    moon_illumination: :class:`float`
-        Moon illumination as %
+    astro: :class:`AstronomicalData`
+        Astronomical data object
     aqi: Optional[:class:`AirQualityData`]
         Air Quality data as :class:`AirQualityData` object. Can be ``None``
     """
@@ -554,36 +537,31 @@ class ForecastDay(APIResponse):
         before_raw = raw.copy()
         raw = raw["day"]
         
-        self.maxtemp_c = raw["maxtemp_c"]
-        self.maxtemp_f = raw["maxtemp_f"]
-        self.mintemp_c = raw["mintemp_c"]
-        self.mintemp_f = raw["mintemp_f"]
-        self.avgtemp_c = raw["avgtemp_c"]
-        self.avgtemp_f = raw["avgtemp_f"]
-        self.maxwind_mph = raw["maxwind_mph"]
-        self.maxwind_kph = raw["maxwind_kph"]
-        self.totalprecip_in = raw["totalprecip_in"]
-        self.totalprecip_mm = raw["totalprecip_mm"]
-        self.avgvis_km = raw["avgvis_km"]
-        self.avgvis_miles = raw["avgvis_miles"]
-        self.avghumidity = raw["avghumidity"]
-        self.uv = raw.get("uv")
-        self.condition_text = raw["condition"]["text"]
-        self.condition_icon = raw["condition"]["icon"]
-        self.condition_code = raw["condition"]["code"]
-        if raw.get("air_quality"): self.aqi = AirQualityData(raw["air_quality"], status, code)
+        self.maxtemp_c: float = raw["maxtemp_c"]
+        self.maxtemp_f: float = raw["maxtemp_f"]
+        self.mintemp_c: float = raw["mintemp_c"]
+        self.mintemp_f: float = raw["mintemp_f"]
+        self.avgtemp_c: float = raw["avgtemp_c"]
+        self.avgtemp_f: float = raw["avgtemp_f"]
+        self.maxwind_mph: float = raw["maxwind_mph"]
+        self.maxwind_kph: float = raw["maxwind_kph"]
+        self.totalprecip_in: float = raw["totalprecip_in"]
+        self.totalprecip_mm: float = raw["totalprecip_mm"]
+        self.avgvis_km: float = raw["avgvis_km"]
+        self.avgvis_miles: float = raw["avgvis_miles"]
+        self.avghumidity: int = raw["avghumidity"]
+        self.uv: Optional[float] = raw.get("uv")
+        self.condition_text: str = raw["condition"]["text"]
+        self.condition_icon: str = raw["condition"]["icon"]
+        self.condition_code: int = raw["condition"]["code"]
+        if raw.get("air_quality"): self.aqi: AirQualityData = AirQualityData(raw["air_quality"], status, code)
         else: self.aqi = None
         
         raw = before_raw
         self.hour_data = list([
             ForecastHour(elem, status, code) for elem in raw["hour"]
         ])
-        self.sunrise = raw["astro"]["sunrise"]
-        self.sunset = raw["astro"]["sunset"]
-        self.moonrise = raw["astro"]["moonrise"]
-        self.moonset = raw["astro"]["moonset"]
-        self.moon_phase = raw["astro"]["moon_phase"]
-        self.moon_illumination = raw["astro"]["moon_illumination"]
+        self.astro: AstronomicalData = AstronomicalData(raw["astro"], status, code)
 
     
 class ForecastData(APIResponse):
@@ -613,9 +591,9 @@ class ForecastData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
         
-        self.location = LocationData(raw["location"], status, code)
-        self.forecast_days = list([ForecastDay(elem, status, code) for elem in raw["forecast"]["forecastday"]])
-        self.alerts = []
+        self.location: LocationData = LocationData(raw["location"], status, code)
+        self.forecast_days: List[ForecastDay] = list([ForecastDay(elem, status, code) for elem in raw["forecast"]["forecastday"]])
+        self.alerts: List[AlertData] = []
         alert_data = raw.get("alerts", {})
         
         for k,v in alert_data.items():
@@ -670,5 +648,57 @@ class FutureData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
         
-        self.location = LocationData(raw["location"], status, code)
-        self.day = ForecastDay(raw["forecast"]["forecastday"][0], status, code)
+        self.location: LocationData = LocationData(raw["location"], status, code)
+        self.day: ForecastDay = ForecastDay(raw["forecast"]["forecastday"][0], status, code)
+
+class AstronomicalData(APIResponse):
+    """
+    Represents astronomical data as a response from WeatherAPI
+    
+    Attributes
+    -----------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    location: :class:`LocationData`
+        Location of the requested data
+    sunrise: :class:`str`
+        Sunrise local time
+    sunset: :class:`str`
+        Sunset local time
+    moonrise: :class:`str`
+        Moonrise local time
+    moonset: :class:`str`
+        Moonset local time
+    moon_phase: :class:`str`
+        Moon phases. Value returned:
+            * New Moon
+            * Waxing Crescent
+            * First Quarter
+            * Waxing Gibbous
+            * Full Moon
+            * Waning Gibbous
+            * Last Quarter
+            * Waning Crescent
+    moon_illumination: :class:`int`
+        Moon illumination
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int],    
+    ) -> None:
+        super().__init__(raw, status, code)
+        
+        self.location: LocationData = LocationData(raw["location"], status, code)
+        self.sunrise: str = raw["sunrise"]
+        self.sunset: str = raw["sunset"]
+        self.moonrise: str = raw["moonrise"]
+        self.moonset: str = raw["moonset"]
+        self.moon_phase: str = raw["moon_phase"]
+        self.moon_illumination: int = int(raw["moon_illumination"])
+        
