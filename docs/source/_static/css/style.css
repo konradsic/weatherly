@@ -87,5 +87,37 @@ h1, h2 {
 }
 
 .bd-sidebar-primary {
-    margin-left: 0;
+    width: 30%;
+}
+
+.sidebar-secondary-item {
+    display: none;
+}
+
+.bd-content {
+    min-width: 100%;
+    justify-content: flex-start !important;
+}
+
+.bd-article-container {
+    min-width: 100% !important;
+}
+
+.bd-page-width, .bd-container {
+    padding: 0;
+    margin: 0;
+}
+
+.bd-container {
+    justify-content: flex-start;
+}
+
+.bd-main {
+    min-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.sidebar-primary-item li .reference.internal {
+    color: var(--pst-color-inline-code);
 }

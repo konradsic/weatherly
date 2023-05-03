@@ -9,9 +9,9 @@
 import sys
 import os
 
-sys.path.insert(0, os.path.abspath("."))
-sys.path.insert(0, os.path.abspath("../.."))
-sys.path.append(os.path.abspath("extensions"))
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.append(os.path.abspath('extensions'))
 
 project = 'weatherly'
 copyright = '2023, konradsic'
@@ -39,20 +39,33 @@ napoleon_numpy_docstring = True
 napoleon_include_private_with_doc = False
 napoleon_include_special_with_doc = False
 napoleon_use_rtype = False
-autodoc_member_order = "groupwise"
+autodoc_member_order = 'groupwise'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
-html_css_files = ["css/style.css"]
-html_js_files = ["js/custom.js"]
+html_css_files = ['css/style.css']
+html_js_files = ['js/custom.js']
 
 html_theme_options = {
     'home_page_in_toc': True,
-    'show_navbar_depth': 3,
-    'show_toc_level': 3,
+    'show_navbar_depth': 1,
+    'show_toc_level': 2,
+    'repository_url': 'https://github.com/konradsic/weatherly',
+    'use_repository_button': True,
+    'logo': {
+        'image_light': 'weatherly_banner_light.png',
+        'image_dark': 'weatherly_banner.png',
+    }
+}
+
+html_sidebars = {
+    '**': [
+        'navbar-logo.html',
+        'localtoc.html'
+    ]
 }
 
 intersphinx_mapping = {'py': ('https://docs.python.org/3', None)}
