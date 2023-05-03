@@ -100,7 +100,7 @@ h1, h2 {
 }
 
 .bd-article-container {
-    min-width: 100% !important;
+    min-width: 90% !important;
 }
 
 .bd-page-width, .bd-container {
@@ -120,4 +120,14 @@ h1, h2 {
 
 .sidebar-primary-item li .reference.internal {
     color: var(--pst-color-inline-code);
+}
+
+@media (min-width: 992px) {
+    .bd-sidebar-primary {
+        flex-basis: 20%;
+    }
+}
+
+ul {
+    padding-inline-start: 1.3rem;
 }

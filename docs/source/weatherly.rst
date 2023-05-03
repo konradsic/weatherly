@@ -5,6 +5,20 @@ Feature documentation
 ==========================
 This section is a documentation of the weatherly API interface.
 
+Version informations
+=======================
+You can gather version info in two ways:
+
+.. data:: __version__
+
+    Version of the project following the `PEP 440 <https://peps.python.org/pep-0440/>`_ standard.
+
+    For example, this can be ``1.2.0a2``
+
+.. data:: version_info
+
+    A named tuple containing version informations. Similiar to :obj:`sys.version_info`
+
 
 Clients
 ==============
