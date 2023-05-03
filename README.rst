@@ -9,6 +9,9 @@
 .. image:: https://img.shields.io/pypi/pyversions/weatherly?color=blue&style=for-the-badge
     :target: https://pypi.python.org/project/weatherly
     :alt: Supported Python versions
+.. image:: https://img.shields.io/pypi/status/weatherly?style=for-the-badge
+    :target: https://pypi.python.org/project/weatherly
+    :alt: Project status
 .. image:: https://img.shields.io/github/actions/workflow/status/konradsic/weatherly/build.yml?style=for-the-badge
     :target: https://github.com/konradsic/weatherly
     :alt: Build status
