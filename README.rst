@@ -23,6 +23,20 @@ Features
 * Modern and typed Python package,
 * Support for languages (provided by WeatherAPI)
 
+Installing
+------------
+To install weatherly on your computer Python 3.10 or higher is required. If your python version meets the requirements run:
+
+.. code:: shell
+    
+    # Windows
+    py -3 -m pip install -U weatherly
+
+    # MacOS / Linux
+    python3 -m pip install -U weatherly
+
+Congratulations! Now weatherly is ready to use on your machine.
+
 Code example
 ---------------------
 
