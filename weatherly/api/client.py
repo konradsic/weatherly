@@ -31,7 +31,7 @@ from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
 from ..responses import (AstronomicalData, CurrentWeatherData, ForecastData,
-                         FutureData, IPData, LocationData)
+                         FutureData, IPData, LocationData, SportsData)
 from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
@@ -602,8 +602,46 @@ class Client(BaseAPIClient):
         self,
         query: str,
         **kwargs: Dict[str, Any]
-    ):
-        raise NotImplementedError
+    ) -> SportsData:
+        """
+        Get sports data for a given query. Uses Sports API.
+
+        Parameters
+        -------------
+        query: :class:`str`
+            Query string, location you want to get sports data for
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+            
+        Returns
+        ----------
+        :class:`SportsData`
+            Retrieved sports data as a class.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when either IP address was invalid or no matching location was found.
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        options = {
+            "q": query,
+            **kwargs
+        }
+        resp = self._call_request("sports.json", options)
+        sports = SportsData(resp[0], resp[1].status_code, None)
+        return sports
 
 
     

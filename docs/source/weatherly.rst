@@ -22,6 +22,9 @@ You can gather version info in two ways:
 
 Clients
 ==============
+
+Client
+------------
 .. attributetable:: Client
 
 .. autoclass:: Client
@@ -33,67 +36,107 @@ Clients
 
 Enums
 =========
+
+Languages
+-------------
 .. autoclass:: Languages
     :members:
 
+Sports event type
+-----------------------
 .. autoclass:: SportsEventType
     :members:
 
 
 Responses from WeatherAPI
 ============================
-.. note::
+.. important::
     Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`Client` class.
+
+.. note::
+    When adding a ``lang`` parameter to the request only ``condition_text`` is translated into requested language.
+
+Current weather
+---------------------
 
 .. attributetable:: CurrentWeatherData
 
-.. autoclass:: CurrentWeatherData
+.. autoclass:: CurrentWeatherData()
     :members:
 
+Location
+------------
 .. attributetable:: LocationData
 
-.. autoclass:: LocationData
+.. autoclass:: LocationData()
     :members:
+
+Air Quality
+--------------
 
 .. attributetable:: AirQualityData
 
-.. autoclass:: AirQualityData
+.. autoclass:: AirQualityData()
     :members:
 
 .. attributetable:: AlertData
 
-.. autoclass:: AlertData
+.. autoclass:: AlertData()
     :members:
+
+Forecast related
+-------------------
 
 .. attributetable:: ForecastData
 
-.. autoclass:: ForecastData
+.. autoclass:: ForecastData()
     :members:
 
 .. attributetable:: ForecastDay
 
-.. autoclass:: ForecastDay
+.. autoclass:: ForecastDay()
     :members:
 
 .. attributetable:: ForecastHour
 
-.. autoclass:: ForecastHour
+.. autoclass:: ForecastHour()
     :members:
+
+Future
+----------
 
 .. attributetable:: FutureData
 
-.. autoclass:: FutureData
+.. autoclass:: FutureData()
     :members:
+
+IP
+-------
 
 .. attributetable:: IPData
 
-.. autoclass:: IPData
+.. autoclass:: IPData()
     :members:
+
+Astronomical
+------------
 
 .. attributetable:: AstronomicalData
 
-.. autoclass:: AstronomicalData
+.. autoclass:: AstronomicalData()
     :members:
+
+Sports related
+-------------------
+
+.. attributetable:: SportsEvent
+
+.. autoclass:: SportsEvent()
+    :members:
+
+.. attributetable:: SportsData
+
+.. autoclass:: SportsData()
 
 
 Exceptions

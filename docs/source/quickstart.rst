@@ -14,12 +14,12 @@ To create a basic client, run
 
     import weatherly
 
-    client = weatherly.WeatherAPIClient(api_key="your-api-key")
+    client = weatherly.Client(api_key="your-api-key")
 
 .. note::
     You need to create a application on WeatherAPI.com to use this module. To get an api key, head to `WeatherAPI.com <https://weatherapi.com/>`_, click singup and create an account
 
-    After creating an account, head to https://www.weatherapi.com/my/ and copy you API key.
+    After creating an account, head to https://www.weatherapi.com/my/ and copy your API key.
 
 Here, we've created a simple client. Save the file, with a good name like ``example_client.py`` and run it. Nothing will happen, because we've only created a client.
 

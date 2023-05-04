@@ -31,6 +31,7 @@ from typing import (
     Iterator,
     Literal,
 )
+from .enums import SportsEventType
 
 __all__ = (
     "CurrentWeatherData",
@@ -43,6 +44,8 @@ __all__ = (
     "FutureData",
     "AstronomicalData",
     "IPData",
+    "SportsEvent",
+    "SportsData",
 )
 
 
@@ -74,10 +77,6 @@ class APIResponse:
 class CurrentWeatherData(APIResponse):
     """
     Current weather data, a common return type from methods that requests this from WeatherAPI.com.
-    
-    .. note::
-
-        Only ``condition_text`` is translated into requested language.
     
     Attributes
     ----------
@@ -783,3 +782,89 @@ class IPData(APIResponse):
         self.tz_id: str = raw["tz_id"]
         self.localtime_epoch: int = raw["localtime_epoch"]
         self.localtime_formatted: str = raw["localtime"]
+
+class SportsEvent(APIResponse):
+    """
+    Represents a single sports event from the Sports API
+
+    Attributes
+    ---------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    stadium: :class:`str`
+        Name of stadium
+    country: :class:`str`
+        Country
+    region: :class:`str`
+        Region
+    tournament: :class:`str`
+        Tournament name
+    start_time: :class:`str`
+        Start local date and time for event in yyyy-MM-dd HH:mm format
+    match: :class:`str` 
+        Match name
+    event_type: :class:`SportsEventType`
+        An enum representing the type of event. Can be "golf", football" or "cricket"
+    """
+    def __init__(
+        self, 
+        raw: Dict[str, Any], 
+        status: int, 
+        code: Optional[int],
+        event_type: SportsEventType
+    ) -> None:
+        super().__init__(raw, status, code)
+        self.event_type = event_type
+        self.stadium = raw["stadium"]
+        self.country = raw["country"]
+        self.region = raw["region"]
+        self.tournament = raw["tournament"]
+        self.start_time = raw["start"]
+        self.match = raw["match"]
+
+class SportsData(APIResponse):
+    """
+    Represents sports data returned from the Sports API
+
+    Attributes
+    -------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    events: List[:class:`SportsEvent`]
+        A list of sports 
+    categorized: Dict[str, List[:class:`SportsEvent`]]
+        Dictionary of events, that are same as in :py:attr:`~events`, but categorized. 
+        Category is the key, and value is a list of :class:`SportsEvent`.
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int]
+    ) -> None:
+        super().__init__(raw, status, code)
+
+        self.events = []
+        self.categorized = {"football": [], "golf": [], "cricket": []}
+        for fball in raw["football"]:
+            obj = SportsEvent(fball, status, code, SportsEventType.football)
+            self.events.append(obj)
+            self.categorized["football"].append(obj)
+
+        for golf in raw["golf"]:
+            obj = SportsEvent(golf, status, code, SportsEventType.golf)
+            self.events.append(obj)
+            self.categorized["golf"].append(obj)
+        
+        for cricket in raw["cricket"]:
+            obj = SportsEvent(cricket, status, code, SportsEventType.cricket)
+            self.events.append(obj)
+            self.categorized["cricket"].append(obj)
