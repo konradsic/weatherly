@@ -27,11 +27,11 @@ from enum import Enum
 __all__ = (
     "Languages",
     "SportsEventType",
+    "TideHeight",
 )
 
 class Languages(Enum):
-    """
-    Languages - an enum representing languages available for use in the WeatherAPI requests.
+    """Languages - an enum representing languages available for use in the WeatherAPI requests.
     
     Attributes are languages and language codes
     
@@ -160,8 +160,7 @@ class Languages(Enum):
     Zulu: str = "zu"
 
 class SportsEventType(Enum):
-    """
-    An enum representing type of sports event
+    """An enum representing type of sports event
 
     Attributes
     ---------------
@@ -181,3 +180,16 @@ class SportsEventType(Enum):
 
     def __repr__(self):
         return repr(self.__str__())
+
+class TideHeight(Enum):
+    """An enum representing tide height i.e. HIGH or LOW
+
+    Attributes
+    ----------------
+    HIGH
+        When the tide is high
+    LOW
+        When the tide is low
+    """
+    LOW = 0
+    HIGH = 1

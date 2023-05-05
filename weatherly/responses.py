@@ -31,7 +31,7 @@ from typing import (
     Iterator,
     Literal,
 )
-from .enums import SportsEventType
+from .enums import SportsEventType, TideHeight
 
 __all__ = (
     "CurrentWeatherData",
@@ -46,14 +46,17 @@ __all__ = (
     "IPData",
     "SportsEvent",
     "SportsData",
+    "TideData",
+    "MarineHour",
+    "MarineDay",
+    "MarineData",
 )
 
 
 GB_DEFRA_BAND = ("Low", "Low", "Low", "Moderate", "Moderate", "Moderate", "High", "High", "High", "Very High")
 
 class APIResponse:
-    """
-    Represents a basic response from Weather API
+    """Represents a basic response from Weather API
     
     Attributes
     ----------
@@ -75,8 +78,7 @@ class APIResponse:
         self.code: Optional[int] = code
 
 class CurrentWeatherData(APIResponse):
-    """
-    Current weather data, a common return type from methods that requests this from WeatherAPI.com.
+    """Current weather data, a common return type from methods that requests this from WeatherAPI.com.
     
     Attributes
     ----------
@@ -165,8 +167,7 @@ class CurrentWeatherData(APIResponse):
         self.uv: float = raw["uv"]
 
 class LocationData(APIResponse):
-    """
-    Location data, returned with most requests.
+    """Location data, returned with most requests.
     
     Attributes
     --------------
@@ -215,7 +216,8 @@ class LocationData(APIResponse):
 
 
 class AirQualityData(APIResponse):
-    """
+    """Air Quality data
+
     Attributes
     --------------
     raw: Dict[:class:`str`, Any]
@@ -278,8 +280,7 @@ class AirQualityData(APIResponse):
         self.gb_defra_band: str = GB_DEFRA_BAND[self.gb_defra_index-1]
 
 class AlertData(APIResponse):
-    """
-    An alert from WeatherAPI
+    """An alert from WeatherAPI
 
     Attributes
     -------------
@@ -339,8 +340,7 @@ class AlertData(APIResponse):
         self.instruction: str = raw["instruction"]
 
 class ForecastHour(APIResponse):
-    """
-    Forecast hour, an element of :class:`ForecastDay`
+    """Forecast hour, an element of :class:`ForecastDay`
     
     Attributes
     -------------
@@ -456,13 +456,14 @@ class ForecastHour(APIResponse):
         self.heatindex_f: float = raw["heatindex_f"]
         self.dewpoint_c: float = raw["dewpoint_c"]
         self.dewpoint_f: float = raw["dewpoint_f"]
-        self.will_it_rain: bool = bool(raw["will_it_rain"])
-        self.will_it_snow: bool = bool(raw["will_it_snow"])
+        # when used for inheritance in MarineHour somehow these four are absent lol
+        self.will_it_rain: bool = bool(raw.get("will_it_rain")) # type: ignore
+        self.will_it_snow: bool = bool(raw.get("will_it_snow")) # type: ignore
+        self.chance_of_rain: int = raw.get("chance_of_rain") # type: ignore
+        self.chance_of_snow: int = raw.get("chance_of_snow") # type: ignore
         self.is_day: bool = bool(raw["is_day"])
         self.vis_km: float = raw["vis_km"]
         self.vis_miles: float = raw["vis_miles"]
-        self.chance_of_rain: int = raw["chance_of_rain"]
-        self.chance_of_snow: int = raw["chance_of_snow"]
         self.gust_mph: float = raw["gust_mph"]
         self.gust_kph: float = raw["gust_kph"]
         self.uv: Optional[float] = raw.get("uv")
@@ -472,8 +473,7 @@ class ForecastHour(APIResponse):
             self.aqi: Optional[AirQualityData] = AirQualityData(raw["air_quality"], status, code)
     
 class ForecastDay(APIResponse):
-    """
-    A forecast day, element of :class:`ForecastData`
+    """A forecast day, element of :class:`ForecastData`
 
     Attributes
     -------------
@@ -569,8 +569,7 @@ class ForecastDay(APIResponse):
 
     
 class ForecastData(APIResponse):
-    """
-    Forecast data returned from Forecast API
+    """Forecast data returned from Forecast API
     
     Attributes
     -------------
@@ -628,8 +627,7 @@ class ForecastData(APIResponse):
 
 
 class FutureData(APIResponse):
-    """
-    Forecast data returned from Future API
+    """Future data returned from Future API
     
     Attributes
     -------------
@@ -656,8 +654,7 @@ class FutureData(APIResponse):
         self.day: ForecastDay = ForecastDay(raw["forecast"]["forecastday"][0], status, code)
 
 class AstronomicalData(APIResponse):
-    """
-    Represents astronomical data as a response from WeatherAPI
+    """Represents astronomical data as a response from WeatherAPI
     
     Attributes
     -----------
@@ -677,7 +674,7 @@ class AstronomicalData(APIResponse):
         Moonrise local time
     moonset: :class:`str`
         Moonset local time
-    moon_phase: :class:`str`
+    moon_phase: Optional[:class:`str`]
         Moon phases. Value returned:
             * New Moon
             * Waxing Crescent
@@ -687,8 +684,9 @@ class AstronomicalData(APIResponse):
             * Waning Gibbous
             * Last Quarter
             * Waning Crescent
-    moon_illumination: :class:`int`
-        Moon illumination
+         Can be ``None``
+    moon_illumination: Optional[:class:`int`]
+        Moon illumination. Can be ``None``
     """
     def __init__(
         self,
@@ -713,12 +711,11 @@ class AstronomicalData(APIResponse):
         self.sunset: str = raw["sunset"]
         self.moonrise: str = raw["moonrise"]
         self.moonset: str = raw["moonset"]
-        self.moon_phase: str = raw["moon_phase"]
-        self.moon_illumination: int = int(raw["moon_illumination"])
+        self.moon_phase: Optional[str] = raw.get("moon_phase")
+        self.moon_illumination: Optional[int] = int(raw.get("moon_illumination")) if raw.get("moon_illumination") is not None else None
         
 class IPData(APIResponse):
-    """
-    Represents IP Data retuned from IP Lookup API
+    """Represents IP Data retuned from IP Lookup API
     
     Attributes
     ------------
@@ -784,8 +781,7 @@ class IPData(APIResponse):
         self.localtime_formatted: str = raw["localtime"]
 
 class SportsEvent(APIResponse):
-    """
-    Represents a single sports event from the Sports API
+    """Represents a single sports event from the Sports API
 
     Attributes
     ---------------
@@ -827,8 +823,7 @@ class SportsEvent(APIResponse):
         self.match = raw["match"]
 
 class SportsData(APIResponse):
-    """
-    Represents sports data returned from the Sports API
+    """Represents sports data returned from the Sports API
 
     Attributes
     -------------
@@ -852,8 +847,8 @@ class SportsData(APIResponse):
     ) -> None:
         super().__init__(raw, status, code)
 
-        self.events = []
-        self.categorized = {"football": [], "golf": [], "cricket": []}
+        self.events: List[SportsEvent] = []
+        self.categorized: Dict[str, List[SportsEvent]] = {"football": [], "golf": [], "cricket": []}
         for fball in raw["football"]:
             obj = SportsEvent(fball, status, code, SportsEventType.football)
             self.events.append(obj)
@@ -868,3 +863,302 @@ class SportsData(APIResponse):
             obj = SportsEvent(cricket, status, code, SportsEventType.cricket)
             self.events.append(obj)
             self.categorized["cricket"].append(obj)
+
+class TideData(APIResponse):
+    """Represents tide data, part of Marine API response
+    
+    Attributes
+    --------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    tide_time: :class:`str`
+        Local tide time
+    tide_height_mt: :class:`float`
+        Tide height in meters
+    tide_type: :class:`TideHeight`
+        Type of height of the tide represented as a :class:`TideHeight` enum. Can be ``LOW`` or ``HIGH``
+    """
+    def __init__(self, 
+        raw: Dict[str, Any], 
+        status: int, 
+        code: Optional[int]
+    ) -> None:
+        super().__init__(raw, status, code)
+
+        self.tide_time: str = raw["tide_time"]
+        self.tide_height_mt: float = float(raw["tide_height_mt"])
+        self.tide_type: TideHeight = getattr(TideHeight, raw["tide_type"].upper())
+
+class MarineHour(ForecastHour):
+    """Marine hour, part of :class:`MarineDay`, this class contains marine and forecast informations from a specific hour.
+    Inherits from :class`ForecastData` to avoid more messy code
+
+    Attributes
+    ------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    time_epoch: :class:`int`
+        Time as epoch
+    time: :class:`str`
+        Date and time
+    temp_c: :class:`float`
+        Temperature in celsius
+    temp_f: :class:`float`
+        Temperature in fahrenheit
+    condition_text: :class:`str`
+        Weather condition text
+    condition_icon: :class:`str`
+        Weather condition icons
+    condition_code: :class:`int`
+        Weather condition code
+    wind_mph: :class:`float`
+        Maximum wind speed in miles per hour
+    wind_kph: :class:`float`
+        Maximum wind speed in kilometer per hour
+    wind_degree: :class:`int`
+        Wind direction in degrees
+    wind_dir: :class:`str`
+        Wind direction as 16 point compass. e.g.: NSW
+    pressure_mb: :class:`float`
+        Pressure in millibars
+    pressure_in: :class:`float`
+        Pressure in inches
+    precip_mm: :class:`float`
+        Precipitation amount in millimeters
+    precip_in: :class:`float`
+        Precipitation amount in inches
+    humidity: :class:`int`
+        Humidity as percentage
+    cloud: :class:`int`
+        Cloud cover as percentage
+    feelslike_c: :class:`float`
+        Feels like temperature as celcius
+    feelslike_f: :class:`float`
+        Feels like temperature as fahrenheit
+    windchill_c: :class:`float`
+        Windchill temperature in celcius
+    windchill_f: :class:`float`
+        Windchill temperature in fahrenheit
+    headindex_c: :class:`float`
+        Heat index in celcius
+    headindex_f: :class:`float`
+        Heat index in fahrenheit
+    dewpoint_c: :class:`float`
+        Dew point in celcius
+    dewpoint_f: :class:`float`
+        Dew point in fahrenheit
+    is_day: :class:`bool`
+        Whether to show day condition icon or night icon
+    vis_km: :class:`float`
+        Visibility in kilometer
+    vis_miles: :class:`float`
+        Visibility in miles
+    gust_mph: :class:`float`
+        Wind gust in miles per hour
+    gust_kph: :class:`float`
+        Wind gust in kilometer per hour
+    uv: :class:`float`
+        UV Index.
+    sig_ht_mt: :class:`float`
+        Significant wave height in metres
+    swell_ht_mt: :class:`float`
+        Swell wave height in metres
+    swell_ht_ft: :class:`float`
+        Swell wave height in feet
+    swell_dir: :class:`float`
+        Swell direction in degrees
+    swell_dir_16_point: :class:`str`
+        Swell direction in 16 point compass e.g. NNW
+    swell_period_secs: :class:`float`
+        Swell period in seconds
+    water_temp_c: :class:`float`
+        Water temperature in Celcius
+    water_temp_f: :class:`float`
+        Water temperature in Fahrenheit
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int]
+    ) -> None:
+        super().__init__(raw, status, code)
+        # cleanup absent elements
+        del self.aqi
+        del self.will_it_rain
+        del self.will_it_snow
+        del self.chance_of_rain
+        del self.chance_of_snow
+
+        self.sig_ht_mt: float = raw["sig_ht_mt"]
+        self.swell_ht_mt: float = raw["swell_ht_mt"]
+        self.swell_ht_ft: float = raw["swell_ht_ft"]
+        self.swell_dir: float = raw["swell_dir"]
+        self.swell_dir_16_point: str = raw["swell_dir_16_point"]
+        self.swell_period_secs: float = raw["swell_period_secs"]
+        self.water_temp_c: float = raw["water_temp_c"]
+        self.water_temp_f: float = raw["water_temp_f"]
+
+class MarineDay(APIResponse):
+    """Marine day, part of :class:`MarineData`, representing a single day with forecast information
+    
+    Attributes
+    ------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    date: :class:`str`
+        Forecast date
+    date_epoch: :class:`int`
+        Forecast date as unix time.
+    maxtemp_c: :class:`float`
+        Maximum temperature in celsius for the day.
+    maxtemp_f: :class:`float`
+        Maximum temperature in fahrenheit for the day
+    mintemp_c: :class:`float`
+        Minimum temperature in celsius for the day
+    mintemp_f: :class:`float`
+        Minimum temperature in fahrenheit for the day
+    avgtemp_c: :class:`float`
+        Average temperature in celsius for the day
+    avgtemp_f: :class:`float`
+        Average temperature in fahrenheit for the day
+    maxwind_mph: :class:`float`
+        Maximum wind speed in miles per hour
+    maxwind_kph: :class:`float`
+        Maximum wind speed in kilometer per hour
+    totalprecip_mm: :class:`float`
+        Total precipitation in milimeter
+    totalprecip_in: :class:`float`
+        Total precipitation in inches
+    avgvis_km: :class:`float`
+        Average visibility in kilometer
+    avgvis_miles: :class:`float`
+        Average visibility in miles
+    avghumidity: :class:`int`
+        Average humidity as percentage
+    uv: :class:`float`
+        UV Index
+    condition_text: :class:`str`
+        Weather condition text
+    condition_icon: :class:`str`
+        Weather condition icon
+    condition_code: :class:`int`
+        Weather condition code
+    hour_data: List[:class:`MarineHour`]
+        A list of :class:`MarineHour` objects representing hourly weather data.
+    astro: :class:`AstronomicalData`
+        Astronomical data object
+    tide_data: List[:class:`TideData`]
+        A list of issues tides
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int]
+    ) -> None:
+        super().__init__(raw, status, code)
+
+        self.date = raw["date"]
+        self.date_epoch = raw["date_epoch"]
+        
+        before_raw = raw.copy()
+        raw = raw["day"]
+        
+        self.maxtemp_c: float = raw["maxtemp_c"]
+        self.maxtemp_f: float = raw["maxtemp_f"]
+        self.mintemp_c: float = raw["mintemp_c"]
+        self.mintemp_f: float = raw["mintemp_f"]
+        self.avgtemp_c: float = raw["avgtemp_c"]
+        self.avgtemp_f: float = raw["avgtemp_f"]
+        self.maxwind_mph: float = raw["maxwind_mph"]
+        self.maxwind_kph: float = raw["maxwind_kph"]
+        self.totalprecip_in: float = raw["totalprecip_in"]
+        self.totalprecip_mm: float = raw["totalprecip_mm"]
+        self.avgvis_km: float = raw["avgvis_km"]
+        self.avgvis_miles: float = raw["avgvis_miles"]
+        self.avghumidity: int = raw["avghumidity"]
+        self.uv: float = raw["uv"]
+        self.condition_text: str = raw["condition"]["text"]
+        self.condition_icon: str = raw["condition"]["icon"]
+        self.condition_code: int = raw["condition"]["code"]
+
+        _all_tides = []
+        for tide in raw["tides"]:
+            _all_tides.extend(tide["tide"])
+        self.tide_data: List[TideData] = list([
+            TideData(tidedata, status, code) for tidedata in _all_tides
+        ])
+        
+        raw = before_raw
+        self.hour_data = list([
+            MarineHour(elem, status, code) for elem in raw["hour"]
+        ])
+        self.astro: AstronomicalData = AstronomicalData(raw["astro"], status, code)
+    
+
+class MarineData(APIResponse):
+    """Marine data, response from Marine API as a class
+    
+    Attributes
+    ------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    location: :class:`LocationData`
+        Location of the requested marine data
+    marine_days: List[:class:`MarineDay`]
+        A list of marine days for the requested period
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int]
+    ) -> None:
+        super().__init__(raw, status, code)
+        
+        self.location: LocationData = LocationData(raw["location"], status, code)
+        self.marine_days: List[MarineDay] = list([
+            MarineDay(daydata, status, code) for daydata in raw["forecast"]["forecastday"]
+        ])
+
+    def iter_hours(self) -> Iterator[MarineHour]:
+        """
+        Iterate over all possible hours from this class.
+
+        .. container:: operations
+
+            .. describe:: for x in y
+
+                Iterate over hour data from this instance.
+
+        Returns
+        -------------
+        Iterator[:class:`MarineHour`]
+            A generator object you can iterate over made of :class:`MarineHour`
+        """
+        for day in self.marine_days:
+            for hour in day.hour_data:
+                yield hour

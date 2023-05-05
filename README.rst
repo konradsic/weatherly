@@ -48,7 +48,7 @@ Code example
     import weatherly
     
     client = weatherly.Client(api_key="your WeatherAPI key")
-    # you can set language to all request, or pass it manually
+    # you can set language to all requests, or pass it manually
     client.set_language("fr")     # lang code
     client.set_language("German") # language full name
 

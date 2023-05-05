@@ -1,6 +1,10 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to this package.
 
+### Version 0.8.0
+This version adds support for the Marine API. Following things were added:
+* `get_marine_data` to the `weatherly.Client` for fetching marine data aswell as many response classes.
+
 ### Version 0.7.0
 This version adds supports for the Sports API. Following things were added:
 * `weatherly.Client(...).get_sports_data` for fetching sports data

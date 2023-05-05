@@ -31,7 +31,7 @@ from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
 from ..responses import (AstronomicalData, CurrentWeatherData, ForecastData,
-                         FutureData, IPData, LocationData, SportsData)
+                         FutureData, IPData, LocationData, SportsData, MarineData)
 from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
@@ -162,8 +162,7 @@ class Client(BaseAPIClient):
         raise NotImplementedError
 
     def set_language(self, lang: Union[str, Languages]) -> Optional[Languages]:
-        """
-        Set client's language when requesting data.
+        """Set client's language when requesting data.
         
         Parameters
         -----------
@@ -189,8 +188,7 @@ class Client(BaseAPIClient):
         aqi: Optional[bool] = None,
         **kwargs: Dict[str, Any]
     ) -> CurrentWeatherData:
-        """
-        Get current weather data
+        """Get current weather data
 
         Parameters
         ----------
@@ -238,8 +236,7 @@ class Client(BaseAPIClient):
         return weather
 
     def get_locations(self, query: str):
-        """
-        Get locations for given query
+        """Get locations for given query
 
         Parameters
         ---------------
@@ -285,8 +282,7 @@ class Client(BaseAPIClient):
         lang: Optional[Union[str, Languages]] = None,
         **kwargs: Dict[str, Any]
     ) -> ForecastData:
-        """
-        Get forecast data from Forecast API
+        """Get forecast data from Forecast API
 
         Parameters
         -------------
@@ -349,8 +345,7 @@ class Client(BaseAPIClient):
         lang: Optional[Union[str, Languages]] = None,
         **kwargs: Dict[str, Any]
     ) -> ForecastData:
-        """
-        Retrieve historical data for given day and query. Uses History API.
+        """Retrieve historical data for given day and query. Uses History API.
 
         Parameters
         -----------------
@@ -429,8 +424,7 @@ class Client(BaseAPIClient):
         lang: Optional[Union[str, Languages]] = None,
         **kwargs: Dict[str, Any]
     ) -> FutureData:
-        """
-        Retrieve future data for given day and query. Uses Future API.
+        """Retrieve future data for given day and query. Uses Future API.
 
         Parameters
         -----------------
@@ -501,8 +495,7 @@ class Client(BaseAPIClient):
         date: str,
         **kwargs: Dict[str, Any]
     ) -> AstronomicalData:
-        """
-        Get astronomical data from Astronomy API
+        """Get astronomical data from Astronomy API
 
         Parameters
         -------------
@@ -548,10 +541,50 @@ class Client(BaseAPIClient):
         self,
         query: str,
         *,
-        tides: Optional[bool],
+        tides: Optional[bool] = None,
         **kwargs: Dict[str, Any]
-    ):
-        raise NotImplementedError
+    ) -> MarineData:
+        """Get marine data from Marine API
+
+        Parameters
+        -------------
+        query: :class:`str`
+            Query string, location you want to get forecast data for
+        tides: Optional[:class:`bool`]
+            Enable/disable tide data.
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments that will be passed to the request.
+            
+        Returns
+        ----------
+        :class:`MarineData`
+            Fetched marine data as a class.
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no location for given query was found
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        options = {
+            "q": query,
+            "tides": tides or self.tides,
+            **kwargs
+        }
+        resp = self._call_request("marine.json", options)
+        marine = MarineData(resp[0], resp[1].status_code, None)
+        return marine
 
     def get_ip_data(
         self,
