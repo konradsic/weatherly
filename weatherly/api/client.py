@@ -197,8 +197,8 @@ class Client(BaseAPIClient):
             client = weatherly.Client(api_key=...)
 
             @client.event
-            def on_error(payload):
-                print(f"An error occured! Payload: {payload}")
+            def on_error(func, exc):
+                print(f"An error occured! Function: {func}, error: {str(exc)}")
         
         In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
         
