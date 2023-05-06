@@ -39,17 +39,17 @@ Enums
 
 Languages
 -------------
-.. autoclass:: Languages
+.. autoclass:: Languages()
     :members:
 
 Sports event type
 -----------------------
-.. autoclass:: SportsEventType
+.. autoclass:: SportsEventType()
     :members:
 
 Tide height type
 -------------------
-.. autoclass:: TideHeight
+.. autoclass:: TideHeight()
     :members:
 
 
