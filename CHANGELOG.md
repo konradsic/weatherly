@@ -1,6 +1,35 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to this package.
 
+### Version 0.9.0
+This quick update adds support for client events (issue [#1](https://github.com/konradsic/weatherly/issues/1)).
+
+**What has been added?**
+* Support for events via decorators or custom client class e.g.
+```py
+import weatherly
+
+# event
+client = weatherly.Client("API_KEY")
+
+@client.event
+def on_error(func, exc):
+    print(f"Exception occured during {func} callback: {exc}")
+
+# custom client methods
+class CustomClient(weatherly.Client):
+    def __init__(self, key):
+        super().__init__(api_key=key)
+    
+    # overwrite default client "on_error" to custom
+    def on_error(func, exc):
+        print(f"Exception occured during {func} callback: {exc}")
+```
+
+**Two events have been added (tracking the issue):**
+* `on_error` - error handler
+* `on_api_call_successful` - event when a client API call has been successfully completed
+
 ### Version 0.8.0
 This version adds support for the Marine API. Following things were added:
 * `get_marine_data` to the `weatherly.Client` for fetching marine data aswell as many response classes.

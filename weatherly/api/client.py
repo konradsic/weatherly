@@ -183,7 +183,7 @@ class Client(BaseAPIClient):
         --------------
         request: :class:`str`
             A request string e.g. https://api.weatherapi.com/v1/some-request&param=value
-        result: :requests:class:`requests.Response`
+        result: :external:py:class:`requests.Response`
             Result as an requests object
         """
         pass
@@ -202,9 +202,9 @@ class Client(BaseAPIClient):
         
         In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
         
-        .. important::
+        .. danger::
         
-            This function **SHOULD NOT** be a coroutine function!
+            The function **SHOULD NOT** be a coroutine function!
         """
         if inspect.iscoroutinefunction(func):
             raise ValueError("Event functions should not be coroutines")
