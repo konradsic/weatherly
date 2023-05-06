@@ -47,6 +47,11 @@ Sports event type
 .. autoclass:: SportsEventType
     :members:
 
+Tide height type
+-------------------
+.. autoclass:: TideHeight
+    :members:
+
 
 Responses from WeatherAPI
 ============================
@@ -138,6 +143,27 @@ Sports related
 
 .. autoclass:: SportsData()
 
+Marine
+-----------------------
+
+.. attributetable:: MarineHour
+
+.. autoclass:: MarineHour()
+    :members:
+
+.. attributetable:: MarineDay
+
+.. autoclass:: MarineDay()
+    :members:
+
+.. attributetable:: MarineData
+
+.. autoclass:: MarineData()
+    :members:
+
+.. attributetable:: TideData
+
+.. autoclass:: TideData()
 
 Exceptions
 ===============
