@@ -23,7 +23,19 @@ SOFTWARE.
 """
 
 import datetime
-from typing import Any, Dict, List, Literal, Optional, Union
+import inspect
+import traceback
+from typing import (
+    Any, 
+    Dict, 
+    List, 
+    Literal, 
+    Optional, 
+    Union, 
+    Callable, 
+    TypeVar,
+    ParamSpec
+)
 
 from .. import utils as utils
 from ..enums import Languages
@@ -40,6 +52,9 @@ BOOL_REPLACE = {True: "yes", False: "no"}
 __all__ = (
     "Client",
 )
+
+T = TypeVar("T")
+P = ParamSpec("P")
 
 class Client(BaseAPIClient):
     """
@@ -143,9 +158,37 @@ class Client(BaseAPIClient):
             elif code == 9999: raise InternalApplicationError(status, code, msg)
             else: raise WeatherAPIException(status, code, msg)
 
+        full_url = str(self.url + endpoint + utils.parse_kwargs_to_urlargs({**self.default_options, **final_options}))
+        self.on_api_call_successful(full_url, resp[1])
         return resp
     
-    def event(self):
+    def on_error(self, func: str, exc: Exception) -> None:
+        """Default implementation of error handling in this client.
+        
+        Parameters
+        ---------------
+        func: :class:`str`
+            Name of function that raised an error
+        exc: :exc:`Exception`
+            Exception that was caught during func callback
+        """
+        print(f"Exception occured during \"{func}\":\n\n{traceback.format_exc()}")
+    
+    def on_api_call_successful(self, request, result):
+        """An event function called when an API call was successful.
+        
+        Default client implementation of this event is null i.e. does nothing.
+        
+        Parameters
+        --------------
+        request: :class:`str`
+            A request string e.g. https://api.weatherapi.com/v1/some-request&param=value
+        result: :requests:class:`requests.Response`
+            Result as an requests object
+        """
+        pass
+    
+    def event(self, func: Callable[P, T]) -> Callable[P, T]:
         """A decorator that turns a function into an event. For example
 
         .. code:: python
@@ -158,8 +201,17 @@ class Client(BaseAPIClient):
                 print(f"An error occured! Payload: {payload}")
         
         In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
+        
+        .. important::
+        
+            This function **SHOULD NOT** be a coroutine function!
         """
-        raise NotImplementedError
+        if inspect.iscoroutinefunction(func):
+            raise ValueError("Event functions should not be coroutines")
+        
+        # overwrite default client event implementation to user's func
+        setattr(self, func.__name__, func)
+        return func
 
     def set_language(self, lang: Union[str, Languages]) -> Optional[Languages]:
         """Set client's language when requesting data.
@@ -174,7 +226,10 @@ class Client(BaseAPIClient):
         Optional[:class:`Languages`]
             An enum class representing the language of the client. Is ``None`` when something went wrong and the language was not set.
         """
-        lang_class = utils.find_language(lang, asobj=True)
+        try:
+            lang_class = utils.find_language(lang, asobj=True)
+        except Exception as exc:
+            self.on_error("set_language", exc)
         if not lang_class:
             return None
 
@@ -230,10 +285,13 @@ class Client(BaseAPIClient):
             **kwargs
         }
         if lang is not None: options["lang"] = lang
-        resp = self._call_request("current.json", options)
+        try:
+            resp = self._call_request("current.json", options)
 
-        weather = CurrentWeatherData(resp[0], resp[1].status_code, None)
-        return weather
+            weather = CurrentWeatherData(resp[0], resp[1].status_code, None)
+            return weather
+        except Exception as exc:
+            self.on_error("get_current_weather", exc)
 
     def get_locations(self, query: str):
         """Get locations for given query
@@ -265,12 +323,15 @@ class Client(BaseAPIClient):
         :exc:`WeatherAPIException`
             Raised when something else went wrong, that does not have a specific exception class.
         """
-        resp = self._call_request("search.json",{"q": query})
+        try:
+            resp = self._call_request("search.json",{"q": query})
 
-        locations = []
-        for loc in resp[0]:
-            locations.append(LocationData(loc, resp[1].status_code, None))
-        return locations
+            locations = []
+            for loc in resp[0]:
+                locations.append(LocationData(loc, resp[1].status_code, None))
+            return locations
+        except Exception as exc:
+            self.on_error("get_locations", exc)
 
     def get_forecast_data(
         self,
@@ -331,9 +392,12 @@ class Client(BaseAPIClient):
         }
         if lang is not None: options["lang"] = lang
 
-        resp = self._call_request("forecast.json", options)
-        forecast = ForecastData(resp[0], resp[1].status_code, None)
-        return forecast
+        try:
+            resp = self._call_request("forecast.json", options)
+            forecast = ForecastData(resp[0], resp[1].status_code, None)
+            return forecast
+        except Exception as exc:
+            self.on_error("get_forecast_data", exc)
 
     def get_historical_data(
         self,
@@ -395,26 +459,28 @@ class Client(BaseAPIClient):
             **kwargs
         }
         if lang is not None: options["lang"] = lang
-
-        # check if given date is really "historical"
         try:
-            splitted = date.split("-")
-            datetuple = datetime.datetime(
-                int(splitted[0]), 
-                int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
-                int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
-                0,0)
-            epoch = datetuple.timestamp()
+            # check if given date is really "historical"
+            try:
+                splitted = date.split("-")
+                datetuple = datetime.datetime(
+                    int(splitted[0]), 
+                    int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
+                    int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
+                    0,0)
+                epoch = datetuple.timestamp()
+            except Exception as exc:
+                raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
+
+            now = datetime.datetime.timestamp(datetime.datetime.utcnow())
+
+            if epoch > now: raise InvalidDate("Date should be before current time, switch from History API to Future to use future dates.")
+
+            resp = self._call_request("history.json", options)
+            history = ForecastData(resp[0], resp[1].status_code, None)
+            return history
         except Exception as exc:
-            raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
-
-        now = datetime.datetime.timestamp(datetime.datetime.utcnow())
-
-        if epoch > now: raise InvalidDate("Date should be before current time, switch from History API to Future to use future dates.")
-
-        resp = self._call_request("history.json", options)
-        history = ForecastData(resp[0], resp[1].status_code, None)
-        return history
+            self.on_error("get_historical_data", exc)
         
     def get_future_data(
         self,
@@ -468,26 +534,29 @@ class Client(BaseAPIClient):
             **kwargs
         }
         if lang is not None: options["lang"] = lang
-
-        # check if given date is really "historical"
+        
         try:
-            splitted = date.split("-")
-            datetuple = datetime.datetime(
-                int(splitted[0]), 
-                int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
-                int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
-                0,0)
-            epoch = datetuple.timestamp()
+            # check if given date is really "historical"
+            try:
+                splitted = date.split("-")
+                datetuple = datetime.datetime(
+                    int(splitted[0]), 
+                    int(splitted[1][1:]) if splitted[1].startswith("0") else int(splitted[1]), 
+                    int(splitted[2][1:]) if splitted[2].startswith("0") else int(splitted[2]),
+                    0,0)
+                epoch = datetuple.timestamp()
+            except Exception as exc:
+                raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
+
+            now = datetime.datetime.timestamp(datetime.datetime.utcnow())
+
+            if epoch < now: raise InvalidDate("Date should be after current time, switch from Future API to History to use past dates.")
+
+            resp = self._call_request("future.json", options)
+            future = FutureData(resp[0], resp[1].status_code, None)
+            return future
         except Exception as exc:
-            raise InvalidDate(f"Failed to convert date {date}: Invalid format") from exc
-
-        now = datetime.datetime.timestamp(datetime.datetime.utcnow())
-
-        if epoch < now: raise InvalidDate("Date should be after current time, switch from Future API to History to use past dates.")
-
-        resp = self._call_request("future.json", options)
-        future = FutureData(resp[0], resp[1].status_code, None)
-        return future
+            self.on_error("get_future_data", exc)
         
     def get_astronomical_data(
         self,
@@ -533,9 +602,12 @@ class Client(BaseAPIClient):
             "dt": date,
             **kwargs
         }
-        resp = self._call_request("astronomy.json", options)
-        astro = AstronomicalData(resp[0], resp[1].status_code, None)
-        return astro
+        try:
+            resp = self._call_request("astronomy.json", options)
+            astro = AstronomicalData(resp[0], resp[1].status_code, None)
+            return astro
+        except Exception as exc:
+            self.on_error("get_astronomical_data", exc)
 
     def get_marine_data(
         self,
@@ -582,9 +654,12 @@ class Client(BaseAPIClient):
             "tides": tides or self.tides,
             **kwargs
         }
-        resp = self._call_request("marine.json", options)
-        marine = MarineData(resp[0], resp[1].status_code, None)
-        return marine
+        try:
+            resp = self._call_request("marine.json", options)
+            marine = MarineData(resp[0], resp[1].status_code, None)
+            return marine
+        except Exception as exc:
+            self.on_error("get_marine_data", exc)
 
     def get_ip_data(
         self,
@@ -627,9 +702,12 @@ class Client(BaseAPIClient):
             "q": ip_address,
             **kwargs
         }
-        resp = self._call_request("ip.json", options)
-        ip = IPData(resp[0], resp[1].status_code, None)
-        return ip
+        try:
+            resp = self._call_request("ip.json", options)
+            ip = IPData(resp[0], resp[1].status_code, None)
+            return ip
+        except Exception as exc:
+            self.on_error("get_ip_data", exc)
 
     def get_sports_data(
         self,
@@ -672,11 +750,12 @@ class Client(BaseAPIClient):
             "q": query,
             **kwargs
         }
-        resp = self._call_request("sports.json", options)
-        sports = SportsData(resp[0], resp[1].status_code, None)
-        return sports
-
-
+        try:
+            resp = self._call_request("sports.json", options)
+            sports = SportsData(resp[0], resp[1].status_code, None)
+            return sports
+        except Exception as exc:
+            self.on_error("get_sports_data", exc)
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
