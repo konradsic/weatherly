@@ -46,7 +46,7 @@
 
 .py-attribute-table-entry > .reference.internal {
     color: var(--pst-color-inline-code);
-    display: block;
+    display: inline-block;
 }
 
 .py-attribute-table-entry:hover > .reference.internal {

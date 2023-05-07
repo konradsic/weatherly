@@ -1157,3 +1157,9 @@ class MarineData(APIResponse):
         for day in self.marine_days:
             for hour in day.hour_data:
                 yield hour
+                
+class BulkRequest():
+    pass
+
+class BulkResponse(APIResponse):
+    pass

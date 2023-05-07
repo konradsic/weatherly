@@ -193,3 +193,37 @@ class TideHeight(Enum):
     """
     LOW = 0
     HIGH = 1
+    
+class WeatherEndpoints(Enum):
+    """An enum representing WeatherAPI endpoint used for bulk requests
+    
+    Attributes
+    -------------
+    CURRENT_WEATHER
+        Current weather endpoint
+    ASTRO
+        Astronomical data enpoint
+    FORECAST
+        Forecast data enpoint
+    FUTURE
+        Future weather data endpoint
+    HISTORY
+        Historical weather data endpoint
+    IP_DATA
+        IP address info endpoint
+    LOCATIONS
+        Search/Autocomplete location endpoint
+    MARINE
+        Marine data endpoint
+    SPORTS
+        Sports data endpoint
+    """
+    CURRENT_WEATHER = 1
+    ASTRO = 2
+    FORECAST = 3
+    FUTURE = 4
+    HISTORY = 5
+    IP_DATA = 6
+    LOCATIONS = 7
+    MARINE = 8
+    SPORTS = 9

@@ -25,25 +25,17 @@ SOFTWARE.
 import datetime
 import inspect
 import traceback
-from typing import (
-    Any, 
-    Dict, 
-    List, 
-    Literal, 
-    Optional, 
-    Union, 
-    Callable, 
-    TypeVar,
-    ParamSpec
-)
+from typing import (Any, Callable, Dict, List, Literal, Optional, ParamSpec,
+                    Tuple, TypeVar, Union)
 
 from .. import utils as utils
-from ..enums import Languages
+from ..enums import Languages, WeatherEndpoints
 from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
-from ..responses import (AstronomicalData, CurrentWeatherData, ForecastData,
-                         FutureData, IPData, LocationData, SportsData, MarineData)
+from ..responses import (AstronomicalData, BulkRequest, BulkResponse,
+                         CurrentWeatherData, ForecastData, FutureData, IPData,
+                         LocationData, MarineData, SportsData)
 from .core import BaseAPIClient
 
 WEATHERAPI_BASE_URL = "https://api.weatherapi.com/v1/"
@@ -718,7 +710,7 @@ class Client(BaseAPIClient):
         Raises
         ---------
         :exc:`NoLocationFound`
-            Raised when either IP address was invalid or no matching location was found.
+            Raised when no matching location was found.
         :exc:`InvalidAPIKey`
             Raised when the API key is invalid
         :exc:`APILimitExceeded`
@@ -742,6 +734,64 @@ class Client(BaseAPIClient):
             return sports
         except Exception as exc:
             self.on_error("get_sports_data", exc)
+            
+    def bulk_request(
+        self,
+        data: BulkRequest,
+        **kwargs
+    ) -> BulkResponse:
+        """A bulk request allowing you to retrieve data for multiple locations at once
+        
+        .. note::
+            Bulk requests only work on one endpoint, so you cannot use it to get data from multiple endpoints e.g. forecast and current weather
+            
+        .. note::
+            To do a bulk request you should build a :class:`BulkRequest` object and pass it as a data parameter first
+            
+        Parameters
+        --------------
+        data: :class:`BulkRequest`
+            Data for the bulk request.
+            To build this class consider using two following methods:
+            
+            .. code:: python
+                import weatherly
+                
+                # 1. by BulkRequest.build
+                req = BulkRequest.build(("my-id", "London"), ("second", "Paris"), endpoint=weatherly.WeatherEndpoints.CURRENT_WEATHER)
+                
+                # 2. by manually setting bulk request params
+                bulk = BulkRequest()
+                bulk.add_endpoint(weatherly.WeatherEndpoints.FORECAST)
+                bulk.add_query(id="my-id", location="Paris")
+                bulk.add_query(id="second", location="London")
+        kwargs: Dict[:class:`str`, Any]
+            Additional keyword arguments. You need to think of them manually, look for them in other methods and pass them in ``key=val`` schema.
+            For example: ``client.bulk_request(req, aqi=True, days=7)``
+        
+        Returns
+        ----------
+        :class:`BulkResponse`
+            Results of the bulk request
+
+        Raises
+        ---------
+        :exc:`NoLocationFound`
+            Raised when no matching location was found.
+        :exc:`InvalidAPIKey`
+            Raised when the API key is invalid
+        :exc:`APILimitExceeded`
+            Raised when API key calls limit was exceeded
+        :exc:`APIKeyDisabled`
+            Raised when API key is disabled
+        :exc:`AccessDenied`
+            Raised when access to given resource was denied
+        :exc:`InternalApplicationError`
+            Raised when there was a very rare internal application error
+        :exc:`WeatherAPIException`
+            Raised when something else went wrong, that does not have a specific exception class.
+        """
+        pass
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
