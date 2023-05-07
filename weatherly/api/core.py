@@ -64,6 +64,7 @@ class BaseAPIClient():
     def _request(
         self,
         path: str,
+        data: Optional[Dict] = None,
         **kwargs: Optional[Dict[str, str]]
     ) -> Tuple[Dict[Any, Any], requests.Response]:
         """
@@ -79,7 +80,10 @@ class BaseAPIClient():
         """
         full_url = self.url + path + parse_kwargs_to_urlargs({**self.default_options, **kwargs})
 
-        response = requests.get(full_url)
+        if not data:
+            response = requests.get(full_url)
+        else:
+            response = requests.get(full_url, json=data)
         return response.json(), response
         
         

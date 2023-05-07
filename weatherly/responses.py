@@ -30,8 +30,9 @@ from typing import (
     List, 
     Iterator,
     Literal,
+    Tuple,
 )
-from .enums import SportsEventType, TideHeight
+from .enums import SportsEventType, TideHeight, WeatherEndpoints
 
 __all__ = (
     "CurrentWeatherData",
@@ -50,6 +51,8 @@ __all__ = (
     "MarineHour",
     "MarineDay",
     "MarineData",
+    "BulkRequest",
+    "BulkResponse",
 )
 
 
@@ -1159,7 +1162,97 @@ class MarineData(APIResponse):
                 yield hour
                 
 class BulkRequest():
-    pass
+    """Represents a bulk request params
+    
+    Attributes
+    -------------
+    queries: List[Tuple[:class:`str`, :class:`str`]]
+        Query data for the request
+    endpoint: :class:`WeatherEndpoints`
+        Enum representing the endpoint for the request
+    """
+    def __init__(self):
+        self.queries: List = []
+        self.endpoint: WeatherEndpoints = None # type: ignore
+        
+    def set_endpoint(self, endpoint: WeatherEndpoints) -> None:
+        """Set the endpoint for the request
+        
+        Attributes
+        -------------
+        endpoint: :class:`WeatherEndpoints`
+            Endpoint for the request as an enum
+        """
+        self.endpoint = endpoint
+        
+    def add_query(self, query_data: Tuple[str, str]) -> List[Tuple[str, str]]:
+        """Add a query to the bulk request
+        
+        Parameters
+        --------------
+        query_data: Tuple[:class:`str`, :class:`str`]
+            Query data for the request as a tuple e.g. ``("id", "London")``
+        
+        Returns
+        ---------
+        List[Tuple[:class:`str`, :class:`str`]]
+            List of updated query parameters with the new query added
+        """
+        self.queries.append(query_data)
+        return self.queries
+    
+    @classmethod
+    def build(cls, *queries, endpoint):
+        """Build a bulk request
+        
+        .. note::
+            This function is a class method i.e. does not require initialization. For example:
+            
+            .. code:: python
+                
+                import weatherly
+                weatherly.BulkRequest.build(...) # <- no initialization needed (no parentheses after BulkRequest)
+        
+        Attributes
+        ------------
+        queries: List[Tuple[:class:`str`, :class:`str`]]
+            Query data for the request
+        endpoint: :class:`WeatherEndpoints`
+            Enum representing the endpoint for the request
+        """
+        bulk = cls()
+        bulk.set_endpoint(endpoint)
+        for query in queries:
+            bulk.add_query(query)
+        return bulk
 
 class BulkResponse(APIResponse):
-    pass
+    """Represents bulk request response data
+    
+    Parameters
+    ------------
+    raw: Dict[:class:`str`, Any]
+        Raw response in a JSON-like format (converted to a python dictionary)
+    status: :class:`int`
+        HTTP status of the response. 200 is OK, and is the most common status.
+    code: Optional[:class:`int`]
+        Response code. In some cases this can be ``None``
+    endpoint: :class:`WeatherEndpoints`
+        Enum representing the endpoint that was bulk-requested
+    data: List[Tuple[str, Any]]
+        A list containing responses with their IDs.
+        For example this can be: ``[("London-ID", CurrentWeatherData), ("other-ID", ForecastData)]``
+    """
+    def __init__(
+        self,
+        raw: Dict[str, Any],
+        status: int,
+        code: Optional[int],
+        endpoint: WeatherEndpoints,
+        data: List[Tuple[str, Any]]
+    ) -> None:
+        super().__init__(raw, status, code)
+        
+        self.endpoint: WeatherEndpoints = endpoint
+        self.data: List[Tuple[str, Any]] = data # too lazy to do it here check Client.bulk_request
+        

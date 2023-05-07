@@ -218,12 +218,12 @@ class WeatherEndpoints(Enum):
     SPORTS
         Sports data endpoint
     """
-    CURRENT_WEATHER = 1
-    ASTRO = 2
-    FORECAST = 3
-    FUTURE = 4
-    HISTORY = 5
-    IP_DATA = 6
-    LOCATIONS = 7
-    MARINE = 8
-    SPORTS = 9
+    CURRENT_WEATHER = "current.json"
+    ASTRO = "astronomy.json"
+    FORECAST = "forecast.json"
+    FUTURE = "future.json"
+    HISTORY = "history.json"
+    IP_DATA = "ip.json"
+    LOCATIONS = "search.json"
+    MARINE = "marine.json"
+    SPORTS = "sports.json"

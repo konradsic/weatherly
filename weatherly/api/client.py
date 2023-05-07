@@ -122,7 +122,7 @@ class Client(BaseAPIClient):
         self.lang = Languages(lang_code) if lang_code else None
     
     
-    def _call_request(self, endpoint: str, options: Dict[str, Any]) -> Dict[str, Any]:
+    def _call_request(self, endpoint: str, options: Dict[str, Any], data: Optional[Dict] = None) -> Dict[str, Any]:
         """Private method used to make requests to WeatherAPI"""
         final_options = self.default_options.copy()
 
@@ -132,8 +132,11 @@ class Client(BaseAPIClient):
         for k,v in options.items():
             # also - replace bool with "yes"/"no"
             if v is not None: final_options[k] = BOOL_REPLACE.get(v, v)
-
-        resp = self._request(endpoint, **final_options)
+        
+        if data:
+            resp = self._request(endpoint, data=data, **final_options)
+        else:
+            resp = self._request(endpoint, **final_options)
 
         if not resp[1].status_code < 400:
             # raise errors yay
@@ -762,7 +765,7 @@ class Client(BaseAPIClient):
                 
                 # 2. by manually setting bulk request params
                 bulk = BulkRequest()
-                bulk.add_endpoint(weatherly.WeatherEndpoints.FORECAST)
+                bulk.set_endpoint(weatherly.WeatherEndpoints.FORECAST)
                 bulk.add_query(id="my-id", location="Paris")
                 bulk.add_query(id="second", location="London")
         kwargs: Dict[:class:`str`, Any]
@@ -791,7 +794,36 @@ class Client(BaseAPIClient):
         :exc:`WeatherAPIException`
             Raised when something else went wrong, that does not have a specific exception class.
         """
-        pass
+        endpoint = data.endpoint.value
+        parsed = {"locations": []}
+        
+        for loc_data in data.queries:
+            parsed["locations"].append({
+                "custom_id": loc_data[0], 
+                "q": loc_data[1]
+            })
+        
+        data = self._call_request(endpoint, kwargs, loc_data)
+        
+        endpoint_to_class = {
+            "current.json": CurrentWeatherData,
+            "astronomy.json": AstronomicalData,
+            "forecast.json": ForecastData,
+            "future.json": FutureData,
+            "history.json": ForecastData,
+            "ip.json": IPData,
+            "search.json": LocationData,
+            "marine.json": MarineData,
+            "sports.json": SportsData
+        }
+        class_ = endpoint_to_class[endpoint]
+        raw = data[0]["bulk"]
+        
+        res = []
+        
+        for elem in raw:
+            elem = elem["query"]
+            res.append((elem["custom_id"], class_))
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
