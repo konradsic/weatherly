@@ -11,18 +11,10 @@ It provides an easy to use interface to access current and historical weather da
 .. note::
    This project is currently under heavy development and does not work for now (until stable version get released)
 
-.. toctree::
-   :maxdepth: 1
-   :caption: Contents
-
-   installing
-   quickstart
-   weatherly
-
 Getting started
 --------------------
 | **First steps:** :doc:`installing`, :doc:`quickstart`
-| **Examples:** Examples of using this package can be found `here <https://github.com/konradsic/weatherly/tree/master/examples>`_
+| **Examples:** :doc:`examples`
 
 Manuals
 -------------

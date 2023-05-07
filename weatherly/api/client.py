@@ -154,7 +154,9 @@ class Client(BaseAPIClient):
             else: raise WeatherAPIException(status, code, msg)
 
         full_url = str(self.url + endpoint + utils.parse_kwargs_to_urlargs({**self.default_options, **final_options}))
-        self.on_api_call_successful(full_url, resp[1])
+        try:
+            self.on_api_call_successful(full_url, resp[1])
+        except AttributeError: pass
         return resp
     
     def on_error(self, func: str, exc: Exception) -> None:
@@ -803,7 +805,9 @@ class Client(BaseAPIClient):
                 "q": loc_data[1]
             })
         
-        data = self._call_request(endpoint, kwargs, loc_data)
+        kwargs["q"] = "bulk"
+        
+        data_res = self._call_request(endpoint, kwargs, parsed)
         
         endpoint_to_class = {
             "current.json": CurrentWeatherData,
@@ -817,13 +821,15 @@ class Client(BaseAPIClient):
             "sports.json": SportsData
         }
         class_ = endpoint_to_class[endpoint]
-        raw = data[0]["bulk"]
+        raw = data_res[0]["bulk"]
         
         res = []
         
         for elem in raw:
             elem = elem["query"]
-            res.append((elem["custom_id"], class_))
+            res.append((elem["custom_id"], class_(elem, data_res[1].status_code, None)))
+        
+        return BulkResponse(data_res[0], data_res[1].status_code, None, data.endpoint, res)
     
     def __str__(self):
         return f"<{self.__class__.__name__} api_key={self.default_options['key']} lang={self.lang}>"
