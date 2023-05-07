@@ -2,19 +2,26 @@
     --grey: #212121;
     --class-color-dark: #eaeaea;
     --class-color-light: #1c1c1c;
+    --pst-color-background: var(--bgcolor-class);
 }
 
 :root[data-theme="dark"] {
     --pst-color-background: var(--grey);
     --pst-color-inline-code: var(--class-color-dark);
-    --border-color: #454545;
-    --bgcolor-class: #353535;
+    --border-color: #545454;
+    --bgcolor-class: #454545;
+    --table-even-color: #1d1d1d;
+    --table-odd-color: #1f1f1f;
+    --table-header-color: #232323;
 }
 
 :root[data-theme="light"] {
     --border-color: #ababab;
     --pst-color-inline-code: var(--class-color-light);
     --bgcolor-class: #d8d8d8;
+    --table-even-color: #e0e0e0;
+    --table-odd-color: #eaeaea;
+    --table-header-color: #d0d0d0;
 }
 
 /* Attributable stuff */
@@ -39,6 +46,7 @@
 
 .py-attribute-table-entry > .reference.internal {
     color: var(--pst-color-inline-code);
+    display: block;
 }
 
 .py-attribute-table-entry:hover > .reference.internal {
@@ -130,4 +138,24 @@ h1, h2 {
 
 ul {
     padding-inline-start: 1.3rem;
+}
+
+button.copybtn:hover {
+    background-color: var(--border-color) !important;
+}
+
+table.table {
+    border-collapse: collapse;
+}
+
+th.head {
+    background-color: var(--table-header-color);
+}
+
+table.table .row-even > td {
+    background-color: var(--table-even-color);
+}
+
+table.table .row-odd > td {
+    background-color: var(--table-odd-color);
 }

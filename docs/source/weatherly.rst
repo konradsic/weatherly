@@ -34,6 +34,62 @@ Client
     .. automethod:: Client.event()
         :decorator:
 
+Event reference
+====================
+Weatherly provides an easy to use event system. There are two ways to register an event function.
+
+**First** method is to use :meth:`Client.event` decorator.
+
+.. code:: python
+
+    import weatherly
+    client = weatherly.Client("your-api-key")
+
+    @client.event
+    def on_error(func_name, exception):
+        print(f"Exception occured in {func_name}!")
+
+**Second** way is to make a custom client class inheriting from :class:`Client`.
+
+.. code:: python
+
+    import weatherly
+
+    class CustomClient(weatherly.Client):
+        def __init__(self, api_key):
+            super().__init__(api_key=api_key)
+
+        def on_error(func_name, exception):
+            print(f"Exception occured in {func_name}!")
+
+.. important::
+    All event functions **mustn't be** coroutines.
+    A :exc:`ValueError` is raised when a function is a coroutine.
+
+Error handling
+--------------------
+.. function:: on_error(func, exc)
+
+    Called when an error occured during calling a client method
+
+    :param func: The function name where the exception occured.
+    :type func: :class:`str`
+
+    :param exc: The exception that occured
+    :type exc: Inherits from :exc:`Exception`
+
+API calls
+------------
+.. function:: on_api_call_successful(request, response)
+
+    Called when an API call (e.g. :meth:`Client.get_current_weather`) was successfully done.
+
+    :param request: The request URL e.g. https://api.weatherapi.com/v1/endpoint?param=value
+    :type request: :class:`str`
+
+    :param response: Response class
+    :type response: :external:py:class:`requests.Response`
+
 Enums
 =========
 
@@ -55,7 +111,7 @@ Tide height type
 
 Responses from WeatherAPI
 ============================
-.. important::
+.. warning::
     Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`Client` class.
 
 .. note::

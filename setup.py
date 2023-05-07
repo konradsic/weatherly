@@ -21,7 +21,8 @@ extras_require = {
     'docs': [
         'sphinx==5.3.0',
         'sphinx_book_theme==1.0.1',
-        'sphinxcontrib_trio==1.1.2'
+        'sphinxcontrib_trio==1.1.2',
+        'sphinx-copybutton==0.5.2'
     ],
     'test': [
         'pytest',

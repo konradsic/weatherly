@@ -28,6 +28,7 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.intersphinx',
     'sphinxcontrib_trio',
+    'sphinx_copybutton',
     'attributetable',
 ]
 
@@ -46,8 +47,8 @@ autodoc_member_order = 'groupwise'
 
 html_theme = 'sphinx_book_theme'
 html_static_path = ['_static']
-html_css_files = ['css/style.css']
-html_js_files = ['js/custom.js']
+html_css_files = ['style.css']
+html_js_files = ['custom.js']
 
 html_theme_options = {
     'home_page_in_toc': True,

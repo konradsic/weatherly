@@ -684,7 +684,8 @@ class AstronomicalData(APIResponse):
             * Waning Gibbous
             * Last Quarter
             * Waning Crescent
-         Can be ``None``
+        
+        Can be ``None``
     moon_illumination: Optional[:class:`int`]
         Moon illumination. Can be ``None``
     """
@@ -1012,12 +1013,6 @@ class MarineDay(APIResponse):
     
     Attributes
     ------------
-    raw: Dict[:class:`str`, Any]
-        Raw response in a JSON-like format (converted to a python dictionary)
-    status: :class:`int`
-        HTTP status of the response. 200 is OK, and is the most common status.
-    code: Optional[:class:`int`]
-        Response code. In some cases this can be ``None``
     raw: Dict[:class:`str`, Any]
         Raw response in a JSON-like format (converted to a python dictionary)
     status: :class:`int`

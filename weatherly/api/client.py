@@ -174,20 +174,6 @@ class Client(BaseAPIClient):
         """
         print(f"Exception occured during \"{func}\":\n\n{traceback.format_exc()}")
     
-    def on_api_call_successful(self, request, result):
-        """An event function called when an API call was successful.
-        
-        Default client implementation of this event is null i.e. does nothing.
-        
-        Parameters
-        --------------
-        request: :class:`str`
-            A request string e.g. https://api.weatherapi.com/v1/some-request&param=value
-        result: :external:py:class:`requests.Response`
-            Result as an requests object
-        """
-        pass
-    
     def event(self, func: Callable[P, T]) -> Callable[P, T]:
         """A decorator that turns a function into an event. For example
 
@@ -202,7 +188,7 @@ class Client(BaseAPIClient):
         
         In the example above, by adding ``@client.event`` the ``on_error`` function has turned into an error handler function
         
-        .. danger::
+        .. important::
         
             The function **SHOULD NOT** be a coroutine function!
         """

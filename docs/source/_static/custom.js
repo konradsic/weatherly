@@ -1,5 +1,3 @@
-
-
 window.addEventListener('load', function() {
    console.log("Custom JS file loaded");
    let operationContainers = document.querySelectorAll(".container.operations");
