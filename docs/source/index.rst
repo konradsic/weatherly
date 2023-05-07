@@ -8,6 +8,14 @@ Welcome to weatherly documentation
 **Weatherly** is a simple package that retrieves weather data from WeatherAPI.com (https://WeatherAPI.com/docs). 
 It provides an easy to use interface to access current and historical weather data for a specific location.
 
+.. toctree::
+   :maxdepth: 1
+
+   installing
+   quickstart
+   examples
+   weatherly
+
 .. note::
    This project is currently under heavy development and does not work for now (until stable version get released)
 

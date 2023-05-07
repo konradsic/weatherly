@@ -760,6 +760,7 @@ class Client(BaseAPIClient):
             To build this class consider using two following methods:
             
             .. code:: python
+            
                 import weatherly
                 
                 # 1. by BulkRequest.build
