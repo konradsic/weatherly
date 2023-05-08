@@ -11,7 +11,7 @@ Before the stable release, two more version will be released: ``v1.0.0a`` (alpha
 * `BulkRequest` class containing all data that will be requested
 * `BulkResponse` class containing fetched data from the API
 
-**How to bulk request?**
+**How to make a bulk request?**
 
 Please note, that you need Pro+ plan or above to call a bulk request
 
