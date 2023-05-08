@@ -124,6 +124,19 @@ Models
 .. note::
     When adding a ``lang`` parameter to the request only ``condition_text`` is translated into requested language.
 
+Base model classes
+---------------------
+
+.. attributetable:: PartialAPIResponse
+
+.. autoclass:: PartialAPIResponse()
+    :members:
+    
+.. attributetable:: APIResponse
+
+.. autoclass:: APIResponse() 
+    :members:
+
 Current weather
 ---------------------
 
