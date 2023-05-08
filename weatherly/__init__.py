@@ -18,7 +18,7 @@ from typing import NamedTuple, Literal
 from .api import *
 from .errors import *
 from .enums import *
-from .responses import *
+from .models import *
 from . import (
     utils as utils
 )

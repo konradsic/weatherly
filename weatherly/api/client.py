@@ -33,7 +33,7 @@ from ..enums import Languages, WeatherEndpoints
 from ..errors import (AccessDenied, APIKeyDisabled, APILimitExceeded,
                       InternalApplicationError, InvalidAPIKey, InvalidDate,
                       NoLocationFound, WeatherAPIException)
-from ..responses import (AstronomicalData, BulkRequest, BulkResponse,
+from ..models import (AstronomicalData, BulkRequest, BulkResponse,
                          CurrentWeatherData, ForecastData, FutureData, IPData,
                          LocationData, MarineData, SportsData)
 from .core import BaseAPIClient
