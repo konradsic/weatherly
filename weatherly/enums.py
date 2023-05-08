@@ -28,6 +28,7 @@ __all__ = (
     "Languages",
     "SportsEventType",
     "TideHeight",
+    "WeatherEndpoints",
 )
 
 class Languages(Enum):

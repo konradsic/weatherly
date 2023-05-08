@@ -108,11 +108,18 @@ Tide height type
 .. autoclass:: TideHeight()
     :members:
 
+Endpoints
+---------------
+.. autoclass:: WeatherEndpoints()
+    :members:
 
-Responses from WeatherAPI
+
+Models
 ============================
 .. warning::
     Those classes should not be created manually, instead they are returned from methods like ``get_current_weather`` of the :class:`Client` class.
+
+    :class:`BulkRequest` is the only object you should build / create, other classes should not even be modified
 
 .. note::
     When adding a ``lang`` parameter to the request only ``condition_text`` is translated into requested language.
@@ -220,6 +227,19 @@ Marine
 .. attributetable:: TideData
 
 .. autoclass:: TideData()
+
+Bulk requests
+-------------------
+
+.. attributetable:: BulkRequest
+
+.. autoclass:: BulkRequest()
+    :members:
+
+.. attributetable:: BulkResponse
+
+.. autoclass:: BulkResponse()
+    :members:
 
 Exceptions
 ===============

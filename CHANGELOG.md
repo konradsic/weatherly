@@ -1,6 +1,47 @@
 # 📜 Weatherly changelog
 In this file you can view the changelog, including updates and changes that were made to this package.
 
+### Version 0.10.0
+This version is a pre-alpha release of this package meaning that the stable version will be released soon.
+
+Before the stable release, two more version will be released: ``v1.0.0a`` (alpha) and ``v1.0.0b`` (beta)
+
+**What has been added?**
+* This update focuses on bulk requests, so you can make a bulk request by calling `Client.bulk_request` function
+* `BulkRequest` class containing all data that will be requested
+* `BulkResponse` class containing fetched data from the API
+
+**How to bulk request?**
+
+Please note, that you need Pro+ plan or above to call a bulk request
+
+1. Build `BulkRequest` object
+```py
+import weatherly
+
+# method one
+bulk = BulkRequest()
+bulk.set_endpoint(weatherly.WeatherEndpoint.FORECAST)
+bulk.add_query(("my-id", "London")) # note that it's a tuple
+bulk.add_query(("second", "Berlin"))
+
+# method two
+bulk = BulkRequest.build(
+    ("my-id", "London"), ("second", "Berlin"),
+    endpoint=weatherly.WeatherEndpoint.FORECAST
+)
+```
+2. Call the client method
+```py
+# variables:
+# client - weatherly.Client with proper plan and API key
+# bulk - bulk request object created before
+
+bulk_resp = client.bulk_request(data=bulk, aqi=True) # enable AirQuality data
+```
+
+Congratulations! You have successfully called the bulk request function. Check the [documentation](https://weatherly.rtfd.io/en/latest) for more informations
+
 ### Version 0.9.0
 This quick update adds support for client events (issue [#1](https://github.com/konradsic/weatherly/issues/1)).
 

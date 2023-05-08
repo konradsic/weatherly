@@ -1178,7 +1178,7 @@ class BulkRequest():
     def set_endpoint(self, endpoint: WeatherEndpoints) -> None:
         """Set the endpoint for the request
         
-        Attributes
+        Parameters
         -------------
         endpoint: :class:`WeatherEndpoints`
             Endpoint for the request as an enum
@@ -1213,7 +1213,7 @@ class BulkRequest():
                 import weatherly
                 weatherly.BulkRequest.build(...) # <- no initialization needed (no parentheses after BulkRequest)
         
-        Attributes
+        Parameters
         ------------
         queries: List[Tuple[:class:`str`, :class:`str`]]
             Query data for the request
@@ -1229,7 +1229,7 @@ class BulkRequest():
 class BulkResponse(APIResponse):
     """Represents bulk request response data
     
-    Parameters
+    Attributes
     ------------
     raw: Dict[:class:`str`, Any]
         Raw response in a JSON-like format (converted to a python dictionary)
@@ -1239,9 +1239,9 @@ class BulkResponse(APIResponse):
         Response code. In some cases this can be ``None``
     endpoint: :class:`WeatherEndpoints`
         Enum representing the endpoint that was bulk-requested
-    data: List[Tuple[str, Any]]
+    data: List[Tuple[:class:`str`, Any]]
         A list containing responses with their IDs.
-        For example this can be: ``[("London-ID", CurrentWeatherData), ("other-ID", ForecastData)]``
+        For example this can be: ``[("London-ID", CurrentWeatherData), ("other-ID", CurrentWeatherData)]``
     """
     def __init__(
         self,

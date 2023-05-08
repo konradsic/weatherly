@@ -72,3 +72,50 @@ Examples of retrieving weather informations
 
     # history
     historical = client.get_historical_data("Berlin", date="2023-05-05")
+
+    # marine
+    marine = client.get_marine_data("Oslo", tides=True) # requires pro+ plan
+
+Bulk requests
+---------------
+
+.. note::
+    Bulk requests work only on Pro+ plan or higher.
+
+    If you register a new account you will recieve a 14 day free trial with this plan.
+
+To make a bulk request:
+
+1. You need to build a ``BulkRequest`` First
+2. Select an endpoint you want to make a bulk request on
+3. Call a client function
+
+Example of code for a simple bulk request:
+
+.. code:: python
+
+    import weatherly
+
+    client = weatherly.Client("api-key-that-has-proplus-plan")
+
+    # 1. build the obj
+    # first way - classmethod
+    bulk = weatherly.BulkRequest.build(
+        ("id-one", "London"),("id-two", "Berlin"), # here pass tuples (id, query)
+        endpoint=weatherly.WeatherEndpoints.CURRENT_WEATHER # select an endpoint from the WeatherEndpoint enum
+    )
+    # second way - build with methods from empty class
+    bulk = BulkRequest() # currently empty 
+    # we will add endpoints and query tuples by using methods
+    bulk.add_query(("id-one", "London")) # tuple (id, query)
+    bulk.add_query(("id-two", "Berlin"))
+    # 2. set endpoint
+    bulk.set_endpoint(weatherly.WeatherEndpoints.CURRENT_WEATHER)
+
+    # 3. call the client function
+    bulk_result = client.bulk_request(data=bulk)
+    bulk_current_weather = bulk_result.data # a list of (id, CurrentWeatherData) tuples
+
+    # example of prining the bulk request results
+    for custom_id, weather_obj in bulk_current_weather:
+        print(f"{custom_id}/{weather_obj.location.name}: {weather_obj.temp_c}C, feels like: {weather_obj.feelslike_c}C")
