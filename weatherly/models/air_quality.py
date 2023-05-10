@@ -32,9 +32,11 @@ from .base import PartialAPIResponse
 __all__ = (
     "AirQualityData",
     "GB_DEFRA_BAND",
+    "US_EPA_BAND"
 )
 
 GB_DEFRA_BAND = ("Low", "Low", "Low", "Moderate", "Moderate", "Moderate", "High", "High", "High", "Very High")
+US_EPA_BAND = ("Good", "Moderate", "Unhealthy for sensitive group", "Unhealthy", "Very Unhealthy", "Hazardous")
 
 class AirQualityData(PartialAPIResponse):
     """Air Quality data
@@ -76,6 +78,8 @@ class AirQualityData(PartialAPIResponse):
     
     gb_defra_band: :class:`str`
         A band corresponding to the :py:attr:`~gb_defra_index`
+    us_epa_band: :class:`str`
+        A band corresponding to the :py:attr:`~us_epa_index`
     """
     def __init__(
         self,
@@ -93,3 +97,4 @@ class AirQualityData(PartialAPIResponse):
         self.gb_defra_index: int = raw["gb-defra-index"]
 
         self.gb_defra_band: str = GB_DEFRA_BAND[self.gb_defra_index-1]
+        self.us_epa_band: str = US_EPA_BAND[self.us_epa_index-1]

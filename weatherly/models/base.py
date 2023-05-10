@@ -99,7 +99,7 @@ class PartialAPIResponse():
         return res
 
 class APIResponse(PartialAPIResponse):
-    """Represents a basic response from Weather API
+    """Represents a basic response from Weather API. Inherits from :class:`PartialAPIResponse`.
     
     Attributes
     ----------

@@ -254,6 +254,20 @@ Bulk requests
 .. autoclass:: BulkResponse()
     :members:
 
+
+Utility functions
+=====================
+This library also provides utility (aka helper) functions, that can be easily used.
+
+Find language enum
+-----------------------
+.. autofunction:: weatherly.utils.find_language
+
+Convert a string to an enum
+----------------------------
+.. autofunction:: weatherly.utils.str_to_enum
+
+
 Exceptions
 ===============
 

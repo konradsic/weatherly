@@ -28,6 +28,7 @@ from typing import (
     overload
 )
 from .enums import Languages
+from enum import Enum
 
 gray = "#535353"
 white = "#ffffff"
@@ -66,16 +67,15 @@ def find_language(lang: str, asobj: bool=False) -> Languages:
     ...
 
 def find_language(lang: str, asobj: bool=False) -> str:
-    """
-    Used to find language code from available languages.
+    """Used to find language code from available languages.
 
-    Paremeters
-    ----------
+    Parameters
+    ---------------
     lang: :class:`str`
         A language you want to search for
 
     Returns
-    -------
+    -----------
     Union[:class:`str`, :class:`Languages`, None]
         Language code, could be ``None``, could be a :class:`Languages` enum.
     """
@@ -90,8 +90,29 @@ def find_language(lang: str, asobj: bool=False) -> str:
     lang = lang.lower()
 
     for language in Languages:
-        if language.name.lower() == lang or language.value == lang:
+        if language.name.lower() == lang or language.value.lower() == lang:
             if asobj: return language
             return language.value
         
     return None
+
+def str_to_enum(query: str, target: Enum) -> Enum:
+    """Find a corresponding enum class for the given string
+    
+    Parameters
+    ------------------
+    query: :class:`str`
+        Query string you want to get the enum class for
+    target: :class:`Enum`
+        An enum class inheriting from :class:`Enum`
+
+    Returns
+    ---------
+    :class:`Enum`
+        Found enum class for the given string
+    """
+    query = query.lower()
+
+    for obj in target:
+        if obj.name.lower() == query or obj.value.lower() == query:
+            return obj
