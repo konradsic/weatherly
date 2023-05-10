@@ -20,8 +20,9 @@ from .errors import *
 from .enums import *
 from .models import *
 from . import (
-    utils as utils
+    utils as utils,
 )
+
 
 class VersionInfo(NamedTuple):
     major: int

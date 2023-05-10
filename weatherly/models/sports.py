@@ -31,6 +31,11 @@ from typing import (
 from .base import APIResponse, PartialAPIResponse
 from ..enums import SportsEventType
 
+__all__ = (
+    "SportsEvent",
+    "SportsData",
+)
+
 class SportsEvent(PartialAPIResponse):
     """Represents a single sports event from the Sports API
 

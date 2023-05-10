@@ -61,24 +61,26 @@ class BulkRequest():
         """
         self.endpoint = endpoint
         
-    def add_query(self, query_data: Tuple[str, str]) -> List[Tuple[str, str]]:
+    def add_query(self, id: str, location: str) -> List[Tuple[str, str]]:
         """Add a query to the bulk request
         
         Parameters
         --------------
-        query_data: Tuple[:class:`str`, :class:`str`]
-            Query data for the request as a tuple e.g. ``("id", "London")``
+        id: :class:`str`
+            Unique identifier for the query
+        location: :class:`str`
+            Location you want to fetch data from
         
         Returns
         ---------
         List[Tuple[:class:`str`, :class:`str`]]
             List of updated query parameters with the new query added
         """
-        self.queries.append(query_data)
+        self.queries.append((str(id), str(location)))
         return self.queries
     
     @classmethod
-    def build(cls, *queries, endpoint):
+    def build(cls, *queries: List[Tuple[str]], endpoint: WeatherEndpoints):
         """Build a bulk request
         
         .. note::
@@ -91,15 +93,15 @@ class BulkRequest():
         
         Parameters
         ------------
-        queries: List[Tuple[:class:`str`, :class:`str`]]
-            Query data for the request
+        queries: List[Tuple[:class:`str`]]
+            Query data for the request as a list of tuples (id, query)
         endpoint: :class:`WeatherEndpoints`
             Enum representing the endpoint for the request
         """
         bulk = cls()
         bulk.set_endpoint(endpoint)
         for query in queries:
-            bulk.add_query(query)
+            bulk.add_query(*query)
         return bulk
 
 class BulkResponse(APIResponse):
